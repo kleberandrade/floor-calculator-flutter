@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:floor_calculator/models/result_model.dart';
 
 class ResultDialog extends StatelessWidget {
@@ -14,34 +13,26 @@ class ResultDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildResultLine(
-            context,
-            'Quantidade de pisos',
-            '${result.amountPieces} pisos',
+          ListTile(
+            title: Text('${result.amountPieces} pisos'),
+            subtitle: Text('Quantidade de pisos'),
           ),
-          SizedBox(height: 10),
-          _buildResultLine(
-            context,
-            'Quantidade de pisos para o rodapé',
-            '${result.amountFooter} pisos',
+          ListTile(
+            title: Text('${result.amountFooter} pisos'),
+            subtitle: Text('Quantidade de pisos para o rodapé'),
           ),
-          SizedBox(height: 10),
-          _buildResultLine(
-            context,
-            'Total de pisos',
-            '${result.amountPieces + result.amountFooter} pisos',
+          ListTile(
+            title: Text('${result.amountPiecesAndFooter} pisos'),
+            subtitle: Text('Total de pisos'),
           ),
           Divider(),
-          _buildResultLine(
-            context,
-            'Metragem quadrada total sem rodapé',
-            '${result.amountPieces * result.areaFloor} m²',
+          ListTile(
+            title: Text('${result.areaWithoutFooter} m²'),
+            subtitle: Text('Metragem quadrada sem rodapé'),
           ),
-          SizedBox(height: 10),
-          _buildResultLine(
-            context,
-            'Metragem quadrada total com rodapé',
-            '${(result.amountPieces + result.amountFooter) * result.areaFloor} m²',
+          ListTile(
+            title: Text('${result.areaWithFooter} m²'),
+            subtitle: Text('Metragem quadrada com rodapé'),
           ),
         ],
       ),
@@ -52,21 +43,6 @@ class ResultDialog extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-        ),
-      ],
-    );
-  }
-
-  _buildResultLine(context, label, result) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.caption,
-        ),
-        Text(
-          result,
-          style: Theme.of(context).textTheme.headline6,
         ),
       ],
     );

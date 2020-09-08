@@ -5,9 +5,9 @@ Aplicativo de uma calculadora de pisos e revestimentos criado para disciplina de
 Tutorial de criação deste app: [clique aqui](https://medium.com/@kleberandrade/criando-um-aplicativo-em-flutter-para-calcular-a-quantidade-de-pisos-por-m%C2%B2-dac30b5b5027)
 
 <p align="center">
-    <img src="https://cdn-images-1.medium.com/max/400/1*K3v6dRE9j9IUwcpl2zjqYQ.png" width="250"/>
-    <img src="https://cdn-images-1.medium.com/max/400/1*s423jEwbRpPAiXjm6d0C4w.png" width="250"/>
-    <img src="https://cdn-images-1.medium.com/max/400/1*2ieKGw1yKJb6iqRIcGoO4w.png" width="250"/>
+    <img src="https://cdn-images-1.medium.com/max/400/1*-bDQqIcOqyc5-4qvQLBODQ.png" width="250"/>
+    <img src="https://cdn-images-1.medium.com/max/400/1*AcNqHgMroIwf2y7XAZHoGQ.png" width="250"/>
+    <img src="https://cdn-images-1.medium.com/max/400/1*B8I5SuZlGanHB8POBmBIZA.png" width="250"/>
 </p>
 
 ## Como clonar o projeto

@@ -22,42 +22,50 @@ class _CalculatorPageState extends State<CalculatorPage> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           padding: EdgeInsets.all(20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildHeaderText('Dimensões do cômodo'),
-                SizedBox(height: 20),
-                _buildNumberInputField(
-                  'Largura (metros)',
-                  onSaved: _controller.setRoomWidth,
-                ),
-                SizedBox(height: 10),
-                _buildNumberInputField(
-                  'Comprimento (metros)',
-                  onSaved: _controller.setRoomLength,
-                ),
-                SizedBox(height: 20),
-                _buildHeaderText('Dimensões do piso'),
-                SizedBox(height: 20),
-                _buildNumberInputField(
-                  'Largura (centimetros)',
-                  onSaved: _controller.setFloorWidth,
-                ),
-                SizedBox(height: 10),
-                _buildNumberInputField(
-                  'Comprimento (centimetros)',
-                  onSaved: _controller.setFloorLength,
-                ),
-                SizedBox(height: 40),
-                _buildCalculateButton(),
-              ],
-            ),
-          ),
+          child: _buildForm(),
         ),
       ),
     );
+  }
+
+  Form _buildForm() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildHeaderText('Dimensões do cômodo'),
+          _buildVerticalSpace(),
+          _buildNumberInputField(
+            'Largura (metros)',
+            onSaved: _controller.setRoomWidth,
+          ),
+          _buildVerticalSpace(),
+          _buildNumberInputField(
+            'Comprimento (metros)',
+            onSaved: _controller.setRoomLength,
+          ),
+          _buildVerticalSpace(),
+          _buildHeaderText('Dimensões do piso'),
+          _buildVerticalSpace(),
+          _buildNumberInputField(
+            'Largura (centimetros)',
+            onSaved: _controller.setFloorWidth,
+          ),
+          _buildVerticalSpace(),
+          _buildNumberInputField(
+            'Comprimento (centimetros)',
+            onSaved: _controller.setFloorLength,
+          ),
+          _buildVerticalSpace(height: 40),
+          _buildCalculateButton(),
+        ],
+      ),
+    );
+  }
+
+  _buildVerticalSpace({double height = 20}) {
+    return SizedBox(height: height);
   }
 
   _buildHeaderText(String title) {
@@ -92,13 +100,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   _buildCalculateButton() {
     return RaisedButton(
-      child: Container(
-        height: 52,
-        child: Center(child: Text('CALCULAR')),
-      ),
-      onPressed: () {
-        _calculate();
-      },
+      child: Text('CALCULAR'),
+      onPressed: _calculate,
     );
   }
 
@@ -106,13 +109,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
     final formState = _formKey.currentState;
     if (formState.validate()) {
       formState.save();
-
       final result = _controller.calculate();
       showDialog(
         context: context,
-        builder: (context) {
-          return ResultDialog(result);
-        },
+        builder: (context) => ResultDialog(result),
       );
     }
   }
