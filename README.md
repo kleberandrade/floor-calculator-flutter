@@ -11,7 +11,7 @@ Tutorial de criação deste app: [clique aqui]()
     -->
 </p>
 
-## Como clonar e importar
+## Como clonar o projeto
 
 *   Faça um fork do projeto (precisa ter uma conta no github)
 *   Abra o terminal do Visual Studio Code
