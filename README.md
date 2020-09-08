@@ -2,13 +2,12 @@
 
 Aplicativo de uma calculadora de pisos e revestimentos criado para disciplina de Programação Mobile, criado por Kleber de Oliveira Andrade
 
-Tutorial de criação deste app: [clique aqui]()
+Tutorial de criação deste app: [clique aqui](https://medium.com/@kleberandrade/criando-um-aplicativo-em-flutter-para-calcular-a-quantidade-de-pisos-por-m%C2%B2-dac30b5b5027)
 
 <p align="center">
-    <!-- <img src="https://cdn-images-1.medium.com/max/1200/1*WdbItC4zKosSqygbVG4oMw.png" width="250"/>
-    <img src="https://cdn-images-1.medium.com/max/1200/1*XnHNyKaV6INFue5l7Sj6EQ.png" width="250"/>
-    <img src="https://cdn-images-1.medium.com/max/1200/1*rKoCLkb9VN14KkOQYekgww.png" width="250"/>
-    -->
+    <img src="https://cdn-images-1.medium.com/max/400/1*K3v6dRE9j9IUwcpl2zjqYQ.png" width="250"/>
+    <img src="https://cdn-images-1.medium.com/max/400/1*s423jEwbRpPAiXjm6d0C4w.png" width="250"/>
+    <img src="https://cdn-images-1.medium.com/max/400/1*2ieKGw1yKJb6iqRIcGoO4w.png" width="250"/>
 </p>
 
 ## Como clonar o projeto
@@ -21,11 +20,11 @@ Tutorial de criação deste app: [clique aqui]()
 
 ## Desafio para aula
 
-*   [ ] Criar uma função para limpar os campos da tela.
-*   [ ] Desafio 2...
-*   [ ] Desafio 3...
-*   [ ] Desafio 4...
-*   [ ] Desafio 5...
+*   [ ] Adicionar o atributo preço (price) na classe FloorModel e um novo campo numérico no CalculatorPage para o usuário digitar o preço;
+*   [ ] Calcular o preço na classe Controller e exibir no ResultDialog;
+*   [ ] Validar os campos de entrada para quando o usuário digitar valores negativos ou zero;
+*   [ ] Criar uma função para limpar (zerar) os campos do formulário;
+*   [ ] Criar um ícone para o aplicativo (plugin flutter_launcher_icons, tutorial, gerador de ícone). Exemplo de como inserir imagens no flutter, clique aqui.
 
 ## Licença
 
