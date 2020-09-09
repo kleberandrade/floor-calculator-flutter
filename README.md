@@ -1,4 +1,4 @@
-# Calculadora de Pisos
+# Calculadora de pisos e revestimentos
 
 Aplicativo de uma calculadora de pisos e revestimentos criado para disciplina de Programação Mobile, criado por Kleber de Oliveira Andrade
 
