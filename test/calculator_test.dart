@@ -1,4 +1,4 @@
-import 'package:floor_calculator/conrtollers/calculator_controller.dart';
+import 'package:floor_calculator/controllers/calculator_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -16,7 +16,7 @@ void main() {
     });
 
     test("Quantidade de pisos para o rodapé", () {
-      expect(result.amountFooter, 10);
+      expect(result.amountFloor, 10);
     });
 
     test("Quantidade total de pisos", () {

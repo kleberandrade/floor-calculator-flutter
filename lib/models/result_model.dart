@@ -10,8 +10,8 @@ class ResultModel {
   });
 
   get amountPieces => piecesByWidth * piecesByLength;
-  get amountFooter => piecesByWidth + piecesByLength;
-  get amountPiecesAndFooter => amountPieces + amountFooter;
-  get areaWithoutFooter => amountPieces * areaFloor;
-  get areaWithFooter => amountPiecesAndFooter * areaFloor;
+  get amountFloor => piecesByWidth + piecesByLength;
+  get amountPiecesAndFooter => amountPieces + amountFloor;
+  double get areaWithoutFooter => amountPieces * areaFloor;
+  double get areaWithFooter => amountPiecesAndFooter * areaFloor;
 }

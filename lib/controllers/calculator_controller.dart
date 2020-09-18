@@ -1,33 +1,30 @@
-import 'package:floor_calculator/models/result_model.dart';
+import 'package:floor_calculator/helpers/parse_helper.dart';
 import 'package:floor_calculator/models/floor_model.dart';
+import 'package:floor_calculator/models/result_model.dart';
 import 'package:floor_calculator/models/room_model.dart';
 
 class CalculatorController {
-  final floor = FloorModel();
-  final room = RoomModel();
-
-  double _parse(String value) {
-    return double.tryParse(value.replaceAll(',', '.')) ?? 0.0;
-  }
-
-  void setFloorWidth(String value) {
-    floor.width = _parse(value);
-  }
-
-  void setFloorLength(String value) {
-    floor.length = _parse(value);
-  }
+  final room = new RoomModel();
+  final floor = new FloorModel();
 
   void setRoomWidth(String value) {
-    room.width = _parse(value);
+    room.width = ParseHelper.toDouble(value);
   }
 
   void setRoomLength(String value) {
-    room.length = _parse(value);
+    room.length = ParseHelper.toDouble(value);
+  }
+
+  void setFloorWidth(String value) {
+    floor.width = ParseHelper.toDouble(value);
+  }
+
+  void setFloorLength(String value) {
+    floor.length = ParseHelper.toDouble(value);
   }
 
   ResultModel calculate() {
-    final result = ResultModel();
+    final result = new ResultModel();
     result.piecesByWidth = (room.width / floor.width).ceil();
     result.piecesByLength = (room.length / floor.length).ceil();
     result.areaFloor = floor.length * floor.width;

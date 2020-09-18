@@ -1,7 +1,8 @@
-import 'package:floor_calculator/conrtollers/calculator_controller.dart';
-import 'package:floor_calculator/helpers/validator.dart';
-import 'package:floor_calculator/widgets/result_dialog.dart';
+import 'package:floor_calculator/controllers/calculator_controller.dart';
+import 'package:floor_calculator/dialogs/result_dialog.dart';
+import 'package:floor_calculator/helpers/validator_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CalculatorPage extends StatefulWidget {
   @override
@@ -16,19 +17,18 @@ class _CalculatorPageState extends State<CalculatorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calculadora de pisos'),
+        title: const Text('Calculadora de pisos'),
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: _buildForm(),
         ),
       ),
     );
   }
 
-  Form _buildForm() {
+  _buildForm() {
     return Form(
       key: _formKey,
       child: Column(
@@ -37,24 +37,24 @@ class _CalculatorPageState extends State<CalculatorPage> {
           _buildHeaderText('Dimensões do cômodo'),
           _buildVerticalSpace(),
           _buildNumberInputField(
-            'Largura (metros)',
+            label: 'Largura (metros)',
             onSaved: _controller.setRoomWidth,
           ),
           _buildVerticalSpace(),
           _buildNumberInputField(
-            'Comprimento (metros)',
+            label: 'Comprimento (metros)',
             onSaved: _controller.setRoomLength,
           ),
           _buildVerticalSpace(),
           _buildHeaderText('Dimensões do piso'),
           _buildVerticalSpace(),
           _buildNumberInputField(
-            'Largura (centimetros)',
+            label: 'Largura (centímetros)',
             onSaved: _controller.setFloorWidth,
           ),
           _buildVerticalSpace(),
           _buildNumberInputField(
-            'Comprimento (centimetros)',
+            label: 'Comprimento (centímetros)',
             onSaved: _controller.setFloorLength,
           ),
           _buildVerticalSpace(height: 40),
@@ -64,19 +64,32 @@ class _CalculatorPageState extends State<CalculatorPage> {
     );
   }
 
-  _buildVerticalSpace({double height = 20}) {
-    return SizedBox(height: height);
+  _buildNumberInputField({String label, Function(String) onSaved}) {
+    return TextFormField(
+      onSaved: onSaved,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: label,
+      ),
+      validator: ValidatorHelper.isValidText,
+      keyboardType: TextInputType.number,
+    );
   }
 
-  _buildHeaderText(String title) {
+  _buildCalculateButton() {
+    return RaisedButton(
+      child: const Text('CALCULAR'),
+      onPressed: _calcular,
+    );
+  }
+
+  _buildHeaderText(String label) {
     return Container(
+      color: Theme.of(context).primaryColor.withOpacity(0.2),
       height: 40,
-      decoration: BoxDecoration(
-        color: Theme.of(context).accentColor.withOpacity(0.1),
-      ),
       child: Center(
         child: Text(
-          title,
+          label,
           style: TextStyle(
             color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.bold,
@@ -86,29 +99,13 @@ class _CalculatorPageState extends State<CalculatorPage> {
     );
   }
 
-  _buildNumberInputField(String label, {Function(String) onSaved}) {
-    return TextFormField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: label,
-      ),
-      validator: Validator.isEmptyText,
-      keyboardType: TextInputType.number,
-      onSaved: onSaved,
-    );
+  _buildVerticalSpace({double height = 20.0}) {
+    return SizedBox(height: height);
   }
 
-  _buildCalculateButton() {
-    return RaisedButton(
-      child: Text('CALCULAR'),
-      onPressed: _calculate,
-    );
-  }
-
-  _calculate() {
-    final formState = _formKey.currentState;
-    if (formState.validate()) {
-      formState.save();
+  void _calcular() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
       final result = _controller.calculate();
       showDialog(
         context: context,
