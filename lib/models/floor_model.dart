@@ -3,7 +3,7 @@ class FloorModel {
   double length;
 
   FloorModel({
-    this.width,
-    this.length,
+    this.width = 0.0,
+    this.length = 0.0,
   });
 }

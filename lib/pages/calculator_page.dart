@@ -37,24 +37,24 @@ class _CalculatorPageState extends State<CalculatorPage> {
           _buildHeaderText('Dimensões do cômodo'),
           _buildVerticalSpace(),
           _buildNumberInputField(
-            label: 'Largura (metros)',
+            'Largura (metros)',
             onSaved: _controller.setRoomWidth,
           ),
           _buildVerticalSpace(),
           _buildNumberInputField(
-            label: 'Comprimento (metros)',
+            'Comprimento (metros)',
             onSaved: _controller.setRoomLength,
           ),
           _buildVerticalSpace(),
           _buildHeaderText('Dimensões do piso'),
           _buildVerticalSpace(),
           _buildNumberInputField(
-            label: 'Largura (centímetros)',
+            'Largura (centímetros)',
             onSaved: _controller.setFloorWidth,
           ),
           _buildVerticalSpace(),
           _buildNumberInputField(
-            label: 'Comprimento (centímetros)',
+            'Comprimento (centímetros)',
             onSaved: _controller.setFloorLength,
           ),
           _buildVerticalSpace(height: 40),
@@ -64,7 +64,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
     );
   }
 
-  _buildNumberInputField({String label, Function(String) onSaved}) {
+  _buildNumberInputField(String label, {Function(String) onSaved}) {
     return TextFormField(
       onSaved: onSaved,
       decoration: InputDecoration(

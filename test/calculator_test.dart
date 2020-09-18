@@ -4,10 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group("Cálculo", () {
     final controller = CalculatorController();
-    controller.room.width = 2.40;
-    controller.room.length = 3.22;
-    controller.floor.width = 0.6;
-    controller.floor.length = 0.6;
+    controller.setRoomWidth('2.4');
+    controller.setRoomLength('3.22');
+    controller.setFloorWidth('0.6');
+    controller.setFloorLength('0.6');
 
     final result = controller.calculate();
 

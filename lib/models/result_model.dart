@@ -9,9 +9,9 @@ class ResultModel {
     this.piecesByLength,
   });
 
-  get amountPieces => piecesByWidth * piecesByLength;
-  get amountFloor => piecesByWidth + piecesByLength;
-  get amountPiecesAndFooter => amountPieces + amountFloor;
+  int get amountPieces => piecesByWidth * piecesByLength;
+  int get amountFloor => piecesByWidth + piecesByLength;
+  int get amountPiecesAndFooter => amountPieces + amountFloor;
   double get areaWithoutFooter => amountPieces * areaFloor;
   double get areaWithFooter => amountPiecesAndFooter * areaFloor;
 }
