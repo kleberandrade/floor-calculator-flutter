@@ -85,13 +85,13 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   _buildHeaderText(String label) {
     return Container(
-      color: Theme.of(context).primaryColor.withOpacity(0.2),
+      color: Theme.of(context).accentColor.withOpacity(0.2),
       height: 40,
       child: Center(
         child: Text(
           label,
           style: TextStyle(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).accentColor,
             fontWeight: FontWeight.bold,
           ),
         ),
