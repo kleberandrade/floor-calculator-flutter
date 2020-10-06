@@ -2,7 +2,6 @@ import 'package:floor_calculator/controllers/calculator_controller.dart';
 import 'package:floor_calculator/dialogs/result_dialog.dart';
 import 'package:floor_calculator/helpers/validator_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class CalculatorPage extends StatefulWidget {
   @override
@@ -12,98 +11,91 @@ class CalculatorPage extends StatefulWidget {
 class _CalculatorPageState extends State<CalculatorPage> {
   final _formKey = GlobalKey<FormState>();
   final _controller = CalculatorController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Calculadora de pisos'),
-      ),
+      appBar: AppBar(title: Text('Calculator Page')),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20),
           child: _buildForm(),
         ),
       ),
     );
   }
 
-  _buildForm() {
+  Form _buildForm() {
     return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildHeaderText('Dimensões do cômodo'),
-          _buildVerticalSpace(),
-          _buildNumberInputField(
-            'Largura (metros)',
-            onSaved: _controller.setRoomWidth,
-          ),
-          _buildVerticalSpace(),
-          _buildNumberInputField(
-            'Comprimento (metros)',
-            onSaved: _controller.setRoomLength,
-          ),
-          _buildVerticalSpace(),
+          SizedBox(height: 20),
+          _buildNumberInputField('Largura', onSaved: _controller.setRoomWidth),
+          SizedBox(height: 20),
+          _buildNumberInputField('Comprimento',
+              onSaved: _controller.setRoomLength),
+          SizedBox(height: 20),
           _buildHeaderText('Dimensões do piso'),
-          _buildVerticalSpace(),
-          _buildNumberInputField(
-            'Largura (centímetros)',
-            onSaved: _controller.setFloorWidth,
-          ),
-          _buildVerticalSpace(),
-          _buildNumberInputField(
-            'Comprimento (centímetros)',
-            onSaved: _controller.setFloorLength,
-          ),
-          _buildVerticalSpace(height: 40),
-          _buildCalculateButton(),
+          SizedBox(height: 20),
+          _buildNumberInputField('Largura (metros)',
+              onSaved: _controller.setFloorWidth),
+          SizedBox(height: 20),
+          _buildNumberInputField('Comprimento (metros)',
+              onSaved: _controller.setFloorLength),
+          SizedBox(height: 20),
+          _buildHeaderText('Preço do piso'),
+          SizedBox(height: 20),
+          _buildNumberInputField('Preço por peça',
+              onSaved: _controller.setFloorPrice),
+          SizedBox(height: 40),
+          _buildCalculatorButton(),
+          SizedBox(height: 10),
+          _buildClearButton(),
         ],
       ),
     );
   }
 
-  _buildNumberInputField(String label, {Function(String) onSaved}) {
-    return TextFormField(
-      onSaved: onSaved,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: label,
-      ),
-      validator: ValidatorHelper.isValidText,
-      keyboardType: TextInputType.number,
-    );
-  }
-
-  _buildCalculateButton() {
-    return RaisedButton(
-      child: const Text('CALCULAR'),
-      onPressed: _calcular,
-    );
-  }
-
   _buildHeaderText(String label) {
     return Container(
-      color: Theme.of(context).primaryColor.withOpacity(0.2),
-      height: 40,
-      child: Center(
-        child: Text(
-          label,
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-            fontWeight: FontWeight.bold,
-          ),
+        height: 40,
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor.withOpacity(0.2),
         ),
+        child: Center(child: Text(label)));
+  }
+
+  _buildNumberInputField(String label, {Function(String) onSaved}) {
+    return TextFormField(
+      keyboardType: TextInputType.number,
+      onSaved: onSaved,
+      validator: ValidatorHelper.isEmptyOrNegative,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutLineInputBorder(),
       ),
     );
   }
 
-  _buildVerticalSpace({double height = 20.0}) {
-    return SizedBox(height: height);
+  _buildCalculatorButton() {
+    return RaisedButton(
+      child: Text('Calcular'),
+      onPressed: _calculate,> ResultDialog(result),
+    );
   }
 
-  void _calcular() {
+  _buildClearButton() {
+    return RaisedButton(
+      onPressed: _clear,
+      child: Text('Limpar'),
+    ):  
+}
+
+  void _clear() => _formKey.currentState.reset();
+
+  void _calculate() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       final result = _controller.calculate();
@@ -111,6 +103,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
         context: context,
         builder: (context) => ResultDialog(result),
       );
-    }
+    }     
   }
-}
+}  

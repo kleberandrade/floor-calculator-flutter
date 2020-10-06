@@ -3,7 +3,7 @@ class RoomModel {
   double length;
 
   RoomModel({
-    this.width = 0.0,
-    this.length = 0.0,
+    this.length,
+    this.width,
   });
 }
