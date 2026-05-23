@@ -65,5 +65,10 @@ flutter_native_splash:
     color: "#FFF8F6"
     image_dark: assets/branding/icon_foreground_1024.png
     color_dark: "#1A110F"
+    # icon_background_color controla a cor do CÍRCULO atrás do ícone no splash
+    # do Android 12+. Sem isso, o SO usa ic_launcher_background (#FF5722, laranja
+    # do ícone da home screen), causando o efeito de "dois splashes".
+    icon_background_color: "#FFF8F6"
+    icon_background_color_dark: "#1A110F"
   android: true
   ios: true
