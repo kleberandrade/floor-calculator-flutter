@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!--
+    Adaptive-icon foreground. Android adaptive icons need the meaningful
+    content to live inside a central 66% safe zone (≈ 672x672 here). We
+    scale the grid + equals down accordingly.
+  -->
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FFE0D6"/>
+    </linearGradient>
+    <linearGradient id="tileAccent" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFE0D6"/>
+      <stop offset="100%" stop-color="#FFCCBC"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.20"/>
+    </filter>
+  </defs>
+
+  <g transform="translate(176 176) scale(0.66)" filter="url(#shadow)">
+    <!-- Same grid as the main logo, scaled to safe zone -->
+    <rect x="220" y="220" width="180" height="180" rx="22" fill="url(#tile)"/>
+    <rect x="422" y="220" width="180" height="180" rx="22" fill="url(#tileAccent)"/>
+    <rect x="624" y="220" width="180" height="180" rx="22" fill="url(#tile)"/>
+    <rect x="220" y="422" width="180" height="180" rx="22" fill="url(#tileAccent)"/>
+    <rect x="422" y="422" width="180" height="180" rx="22" fill="url(#tile)"/>
+    <rect x="624" y="422" width="180" height="180" rx="22" fill="url(#tileAccent)"/>
+    <rect x="220" y="624" width="180" height="180" rx="22" fill="url(#tile)"/>
+    <rect x="422" y="624" width="180" height="180" rx="22" fill="url(#tileAccent)"/>
+    <rect x="624" y="624" width="180" height="180" rx="22" fill="url(#tile)"/>
+  </g>
+
+  <!-- Equals sign in center -->
+  <g fill="#E64A19" transform="translate(176 176) scale(0.66)">
+    <rect x="446" y="486" width="132" height="28" rx="14"/>
+    <rect x="446" y="538" width="132" height="28" rx="14"/>
+  </g>
+</svg>

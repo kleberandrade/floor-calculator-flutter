@@ -1,0 +1,214 @@
+{
+  "@@locale": "pt",
+  "appTitle": "Calculadora de Pisos",
+  "calculatorTitle": "Calculadora de pisos",
+  "resultTitle": "Resultado",
+  "floorDimensionsSection": "Dimensões do piso",
+  "roomsSection": "Cômodos",
+  "wastageLabel": "Margem de perda: {percent}%",
+  "@wastageLabel": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "floorWidthLabel": "Largura (cm)",
+  "floorLengthLabel": "Comprimento (cm)",
+  "pricePerBoxLabel": "Preço por caixa (R$)",
+  "piecesPerBoxLabel": "Pisos por caixa",
+  "roomNameLabel": "Nome do cômodo",
+  "roomWidthLabel": "Largura (m)",
+  "roomLengthLabel": "Comprimento (m)",
+  "addRoom": "Adicionar cômodo",
+  "removeRoom": "Remover cômodo",
+  "calculateButton": "CALCULAR",
+  "shareButton": "Compartilhar",
+  "continueButton": "CONTINUAR",
+  "clearFormTooltip": "Limpar campos",
+  "clearedToast": "Formulário limpo",
+  "calculateSuccessToast": "Cálculo realizado",
+  "calculateErrorTitle": "Verifique os campos do formulário",
+  "calculateErrorDesc": "Há valores inválidos ou faltando para calcular.",
+  "shareDoneToast": "Orçamento compartilhado",
+  "noResultEmpty": "Nenhum cálculo realizado.",
+  "quantitiesSection": "Quantidades",
+  "areasSection": "Áreas",
+  "costSection": "Custo",
+  "perRoomSection": "Por cômodo",
+  "floorPiecesLabel": "Quantidade de pisos no chão",
+  "footerPiecesLabel": "Quantidade de pisos para o rodapé",
+  "totalPiecesNoWastageLabel": "Quantidade total (sem perda)",
+  "totalPiecesWithWastageLabel": "Total com {percent}% de perda",
+  "@totalPiecesWithWastageLabel": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "areaWithoutFooterLabel": "Metragem quadrada sem rodapé",
+  "areaWithFooterLabel": "Metragem quadrada com rodapé",
+  "boxesLabel": "{count} caixas",
+  "@boxesLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "piecesPerBoxFootnote": "{count} pisos por caixa",
+  "@piecesPerBoxFootnote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "piecesUnit": "{count} pisos",
+  "@piecesUnit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "totalCostLabel": "Custo total estimado",
+  "perRoomTileSubtitle": "{name} — {area} m²",
+  "@perRoomTileSubtitle": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "area": {"type": "String"}
+    }
+  },
+  "validatorFloorWidth": "Informe a largura (cm) maior que zero",
+  "validatorFloorLength": "Informe o comprimento (cm) maior que zero",
+  "validatorPricePerBox": "Informe o preço por caixa maior que zero",
+  "validatorPiecesPerBox": "Informe quantos pisos vêm na caixa",
+  "validatorRoomWidth": "Informe a largura (m) maior que zero",
+  "validatorRoomLength": "Informe o comprimento (m) maior que zero",
+  "defaultRoomName": "Cômodo {index}",
+  "@defaultRoomName": {
+    "placeholders": {
+      "index": {"type": "int"}
+    }
+  },
+  "themeMenuTitle": "Tema",
+  "themeLight": "Claro",
+  "themeDark": "Escuro",
+  "themeSystem": "Sistema",
+  "languageMenuTitle": "Idioma",
+  "languagePortuguese": "Português",
+  "languageEnglish": "Inglês",
+  "languageSpanish": "Espanhol",
+  "shareBudgetTitle": "Orçamento de piso",
+  "shareFloorLine": "Piso: {w} x {l} cm",
+  "@shareFloorLine": {
+    "placeholders": {
+      "w": {"type": "String"},
+      "l": {"type": "String"}
+    }
+  },
+  "shareWastageLine": "Perda considerada: {percent}%",
+  "@shareWastageLine": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  },
+  "shareRoomsHeader": "Cômodos:",
+  "shareRoomLine": "- {name}: {area} m² ({pieces} pisos)",
+  "@shareRoomLine": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "area": {"type": "String"},
+      "pieces": {"type": "int"}
+    }
+  },
+  "shareSummaryHeader": "Resumo:",
+  "shareFloorPieces": "- Pisos no chão: {count}",
+  "@shareFloorPieces": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "shareFooterPieces": "- Pisos para rodapé: {count}",
+  "@shareFooterPieces": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "shareTotalWithWastage": "- Total com perda: {count} pisos",
+  "@shareTotalWithWastage": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "shareTotalArea": "- Área total: {area} m²",
+  "@shareTotalArea": {
+    "placeholders": {"area": {"type": "String"}}
+  },
+  "shareBoxes": "- Caixas necessárias: {count}",
+  "@shareBoxes": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "shareCost": "- Custo total: R$ {value}",
+  "@shareCost": {
+    "placeholders": {"value": {"type": "String"}}
+  },
+  "homeTitle": "Calculadora de Obra",
+  "calculatorsSection": "Calculadoras",
+  "toolsSection": "Ferramentas",
+  "floorCalculatorTile": "Pisos",
+  "paintCalculatorTile": "Tinta",
+  "mortarCalculatorTile": "Argamassa e rejunte",
+  "concreteCalculatorTile": "Concreto",
+  "stairsCalculatorTile": "Escada",
+  "levelToolTile": "Nível",
+  "compassToolTile": "Bússola",
+  "flashlightToolTile": "Lanterna",
+  "calculateAction": "CALCULAR",
+  "resultLabel": "Resultado",
+  "paintAreaLabel": "Área a pintar (m²)",
+  "paintCoatsLabel": "Demãos",
+  "paintYieldLabel": "Rendimento (m²/L)",
+  "paintYieldHint": "Padrão: 10 m²/L (uma demão de látex)",
+  "paintTotalLiters": "Total de tinta",
+  "paintCans18L": "Latas de 18 L",
+  "paintCans3_6L": "Galões de 3,6 L",
+  "paintLitersUnit": "{value} L",
+  "@paintLitersUnit": {"placeholders": {"value": {"type": "String"}}},
+  "mortarAreaLabel": "Área a assentar (m²)",
+  "mortarTileWidthLabel": "Largura do piso (cm)",
+  "mortarTileLengthLabel": "Comprimento do piso (cm)",
+  "mortarJointLabel": "Largura da junta (mm)",
+  "mortarBagsLabel": "Sacos de argamassa colante (20 kg)",
+  "mortarAdhesiveKgLabel": "Argamassa total (kg)",
+  "mortarGroutKgLabel": "Rejunte (kg)",
+  "concreteVolumeLabel": "Volume a concretar (m³)",
+  "concreteMixLabel": "Traço (cimento:areia:brita)",
+  "concreteWcRatioLabel": "Fator água/cimento (a/c)",
+  "concreteMixStructural": "1 : 2 : 3 — estrutural (≈ 20 MPa)",
+  "concreteMixFloor": "1 : 3 : 4 — contrapiso (≈ 15 MPa)",
+  "concreteMixFoundation": "1 : 4 : 6 — fundação simples (≈ 10 MPa)",
+  "concreteCementBags": "Sacos de cimento de 50 kg",
+  "concreteCementKg": "Cimento (kg)",
+  "concreteSand": "Areia (m³)",
+  "concreteGravel": "Brita (m³)",
+  "concreteWater": "Água (L)",
+  "stairsHeightLabel": "Altura piso a piso (cm)",
+  "stairsLengthLabel": "Vão disponível (cm) — opcional",
+  "stairsSteps": "Número de degraus",
+  "stairsRiser": "Espelho (cm)",
+  "stairsTread": "Piso do degrau (cm)",
+  "stairsTotalLength": "Comprimento total (cm)",
+  "stairsComfortable": "Dimensionamento dentro do conforto (Blondel)",
+  "stairsNotComfortable": "Fora da faixa de conforto — ajuste a altura ou o número de degraus",
+  "levelInstructions": "Apoie o celular sobre a superfície a verificar.",
+  "levelTiltX": "Inclinação lateral",
+  "levelTiltY": "Inclinação frontal",
+  "compassHeading": "Direção",
+  "compassNorth": "N",
+  "compassEast": "L",
+  "compassSouth": "S",
+  "compassWest": "O",
+  "compassUnavailable": "Bússola indisponível neste aparelho.",
+  "flashlightOn": "Acender",
+  "flashlightOff": "Apagar",
+  "flashlightUnavailable": "Lanterna indisponível neste aparelho.",
+  "validatorPositive": "Informe um valor maior que zero",
+  "validatorPositiveInt": "Informe um inteiro maior que zero"
+}

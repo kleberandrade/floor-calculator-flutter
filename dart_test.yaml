@@ -1,0 +1,3 @@
+tags:
+  golden:
+    description: "Golden image tests using alchemist."
