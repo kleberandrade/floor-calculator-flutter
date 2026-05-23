@@ -49,14 +49,21 @@ flutter_launcher_icons:
   min_sdk_android: 21
 
 flutter_native_splash:
-  color: "#FF5722"
+  # Cores extraídas de ColorScheme.fromSeed(seedColor: Colors.deepOrange)
+  # para combinar com a cor de superfície do Scaffold (sem "flash" na transição
+  # splash → primeiro frame do app).
+  #
+  # Se mudar a seed do tema em lib/core/theme_app.dart, rode
+  #   flutter test tool/print_theme_colors.dart
+  # para descobrir as novas cores e atualize aqui.
+  color: "#FFF8F6"       # ColorScheme.light.surface
+  color_dark: "#1A110F"  # ColorScheme.dark.surface
   image: assets/branding/splash_512.png
-  color_dark: "#3E2723"
   image_dark: assets/branding/splash_512.png
   android_12:
     image: assets/branding/icon_foreground_1024.png
-    color: "#FF5722"
+    color: "#FFF8F6"
     image_dark: assets/branding/icon_foreground_1024.png
-    color_dark: "#3E2723"
+    color_dark: "#1A110F"
   android: true
   ios: true
