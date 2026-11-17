@@ -11,6 +11,8 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       await tester.pumpWidget(const MyApp());
+      await tester.tap(find.byType(SwitchListTile));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Usar exemplo'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Calcular quantidade'));
@@ -26,6 +28,10 @@ void main() {
       await tester.tap(find.byTooltip('Limpar formulário'));
       await tester.pumpAndSettle();
       expect(find.text('Pronto para planejar?'), findsOneWidget);
+      final fields = tester.widgetList<TextFormField>(
+        find.byType(TextFormField),
+      );
+      expect(fields.every((field) => field.controller!.text.isEmpty), isTrue);
     },
   );
   testWidgets('narrow screen with large text scrolls without overflow', (

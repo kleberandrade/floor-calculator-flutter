@@ -29,6 +29,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   });
 
   void _example() {
+    _skirting = false;
     _form.currentState?.reset();
     const values = ['2,40', '3,22', '60', '60', '10', '4'];
     for (var i = 0; i < values.length; i++) {
@@ -38,10 +39,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
   }
 
   void _clear() {
+    _form.currentState?.reset();
     for (final field in _fields) {
       field.clear();
     }
-    _form.currentState?.reset();
     setState(() {
       _result = null;
       _error = null;

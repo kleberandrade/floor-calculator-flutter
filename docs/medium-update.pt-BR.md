@@ -335,6 +335,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   });
 
   void _example() {
+    _skirting = false;
     _form.currentState?.reset();
     const values = ['2,40', '3,22', '60', '60', '10', '4'];
     for (var i = 0; i < values.length; i++) {
@@ -344,10 +345,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
   }
 
   void _clear() {
+    _form.currentState?.reset();
     for (final field in _fields) {
       field.clear();
     }
-    _form.currentState?.reset();
     setState(() {
       _result = null;
       _error = null;
@@ -693,6 +694,8 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       await tester.pumpWidget(const MyApp());
+      await tester.tap(find.byType(SwitchListTile));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Usar exemplo'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Calcular quantidade'));
@@ -708,6 +711,10 @@ void main() {
       await tester.tap(find.byTooltip('Limpar formulário'));
       await tester.pumpAndSettle();
       expect(find.text('Pronto para planejar?'), findsOneWidget);
+      final fields = tester.widgetList<TextFormField>(
+        find.byType(TextFormField),
+      );
+      expect(fields.every((field) => field.controller!.text.isEmpty), isTrue);
     },
   );
   testWidgets('narrow screen with large text scrolls without overflow', (
@@ -773,9 +780,9 @@ flutter test --coverage
 flutter build web --no-wasm-dry-run
 ```
 
-Os testes cobrem conversão de centímetros, exemplo original, arredondamento por dimensão, margem de perda, caixas fechadas, limites, números inválidos, dimensões muito pequenas e interação do formulário. O teste de tela confirma que editar invalida o resultado e que limpar restaura o estado vazio; também executa o fluxo em tela estreita com texto ampliado.
+Os testes cobrem conversão de centímetros, exemplo original, arredondamento por dimensão, margem de perda, caixas fechadas, limites, números inválidos, dimensões muito pequenas e interação do formulário. O teste de tela confirma que editar invalida o resultado, que o exemplo desliga um rodapé ativado anteriormente e que limpar esvazia de fato todos os campos; também executa o fluxo em tela estreita com texto ampliado.
 
-Os testes foram escritos antes da implementação correspondente e suas falhas foram observadas. A suíte foi então usada para corrigir o preenchimento do exemplo e um arredondamento que gerava zero peças para uma dimensão positiva muito pequena. O workflow do GitHub executa análise, formatação, testes e build Web. Consulte `docs/validation.md` para os resultados reais e limitações de plataformas.
+Os testes foram escritos antes da implementação correspondente e suas falhas foram observadas. A suíte foi então usada para corrigir o preenchimento do exemplo, a restauração da opção de rodapé, a limpeza real dos controladores de texto e um arredondamento que gerava zero peças para uma dimensão positiva muito pequena. O workflow do GitHub executa análise, formatação, testes e build Web. Consulte `docs/validation.md` para os resultados reais e limitações de plataformas.
 
 ### Resultado e desafios
 

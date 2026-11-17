@@ -2,6 +2,7 @@
 
 ![Flutter 3.41.9](https://img.shields.io/badge/Flutter-3.41.9-02569B?logo=flutter)
 ![Dart 3.11.5](https://img.shields.io/badge/Dart-3.11.5-0175C2?logo=dart)
+[![Flutter checks](https://github.com/kleberandrade/floor-calculator-flutter/actions/workflows/flutter.yml/badge.svg?branch=master)](https://github.com/kleberandrade/floor-calculator-flutter/actions/workflows/flutter.yml)
 [![MIT license](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 A Flutter classroom app by **Kleber de Oliveira Andrade** for estimating rectangular floor and wall-covering quantities. The Portuguese interface separates room dimensions in **meters** from tile dimensions in **centimeters**, explains rounding, and shows a shopping list alongside the form on wide screens.
@@ -60,7 +61,7 @@ flutter test --coverage
 flutter build web --no-wasm-dry-run
 ```
 
-The committed GitHub workflow `.github/workflows/flutter.yml` runs these checks on `master` pushes and pull requests using Flutter 3.41.9. No invented passing/coverage badge is shown. Transitive test packages are pinned by Flutter; do not force incompatible upgrades to silence `pub outdated` notices.
+The committed GitHub workflow `.github/workflows/flutter.yml` runs these checks on `master` pushes and pull requests using Flutter 3.41.9. The CI badge reports the actual workflow status; no coverage badge is inferred from a local run. Transitive test packages are pinned by Flutter; do not force incompatible upgrades to silence `pub outdated` notices.
 
 For a built Web preview:
 
