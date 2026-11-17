@@ -1,0 +1,19 @@
+{
+  "name": "Calculadora de pisos",
+  "short_name": "Pisos",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f7f4ef",
+  "theme_color": "#9a452b",
+  "description": "Calcule pisos e revestimentos com unidades e arredondamentos claros.",
+  "lang": "pt-BR",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
