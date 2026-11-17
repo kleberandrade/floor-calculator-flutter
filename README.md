@@ -1,90 +1,92 @@
 # Floor Calculator
 
-[![Language: Dart](https://img.shields.io/badge/Language-Dart-0175C2)](https://github.com/kleberandrade/floor-calculator-flutter/blob/master/pubspec.yaml)
-[![Framework: Flutter](https://img.shields.io/badge/Framework-Flutter-02569B)](https://github.com/kleberandrade/floor-calculator-flutter/blob/master/pubspec.yaml)
+![Flutter 3.41.9](https://img.shields.io/badge/Flutter-3.41.9-02569B?logo=flutter)
+![Dart 3.11.5](https://img.shields.io/badge/Dart-3.11.5-0175C2?logo=dart)
+[![MIT license](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-Flutter classroom app for calculating floor and wall-covering quantities.
+A Flutter classroom app by **Kleber de Oliveira Andrade** for estimating rectangular floor and wall-covering quantities. The Portuguese interface separates room dimensions in **meters** from tile dimensions in **centimeters**, explains rounding, and shows a shopping list alongside the form on wide screens.
 
-## Getting started
+![Running Flutter Web app — example result](docs/screenshots/desktop-result.jpg)
 
-- Select a Flutter release whose bundled Dart SDK satisfies the manifest constraint, then run the commands below from the repository root.
+## Run locally
+
+Verified toolchain: Flutter **3.41.9 stable**, Dart **3.11.5**, Chrome **157** on macOS. The manifest requires Dart ≥3.11 and Flutter ≥3.41; use the verified version for reproducible results. No account, API keys, server, or database is required.
 
 ```sh
+git clone https://github.com/kleberandrade/floor-calculator-flutter.git
+cd floor-calculator-flutter
 flutter pub get
-flutter run
+flutter run -d chrome
 ```
 
-- If the app depends on Firebase or another external service, configure your own service project using the dependencies and original notes; credentials are not supplied by this guide.
+Select **Usar exemplo**, then **Calcular quantidade**. The sample uses a 2.40 × 3.22 m room, 60 × 60 cm tiles, 10% waste and 4 pieces per box. It produces **24 floor pieces → 27 with waste → 7 boxes / 28 purchased pieces / 10.08 m²**. The actual room area is 7.728 m² (displayed as 7.73 m²).
 
-## Recorded requirements
+Use Tab/Shift+Tab to navigate, Enter in the last field to calculate, and **Limpar formulário** to reset. Decimal commas and points are accepted; thousands separators, negative values, zero dimensions, non-finite numbers and fractional box sizes are rejected. Editing any value clears the old result so it cannot be mistaken for a current estimate. On narrow screens, scroll below the form to see the result.
 
-- Dart SDK constraint from [`pubspec.yaml`](https://github.com/kleberandrade/floor-calculator-flutter/blob/master/pubspec.yaml): `>=2.7.0 <3.0.0`.
+## Calculation and assumptions
 
-## Repository map
+1. Convert tile dimensions from centimeters to meters.
+2. Round up each room-to-tile dimension, then multiply the rows and columns. Tiles retain their entered orientation. There is no automatic rotation or reuse of cuts.
+3. Optionally add the original **didactic skirting estimate**, one extra piece per row plus one per column. This preserves the lesson's `rows + columns` rule, **not** a perimeter/height based skirting design. Disabled by default.
+4. Apply waste (0–100%) and round up to whole pieces.
+5. Round up to full boxes and calculate purchased tile area.
 
-- [lib](https://github.com/kleberandrade/floor-calculator-flutter/tree/master/lib)
-- [test](https://github.com/kleberandrade/floor-calculator-flutter/tree/master/test)
-- [android](https://github.com/kleberandrade/floor-calculator-flutter/tree/master/android)
-- [ios](https://github.com/kleberandrade/floor-calculator-flutter/tree/master/ios)
+The original lesson's 2.40 × 3.22 m example still gives 24 floor pieces and 10 additional skirting pieces (34 total / 12.24 m²) when waste is zero and boxes contain one piece. No grout joints, openings, diagonal layouts, labor or prices are modeled. Confirm layout with an installer before buying. Dimensions are limited to 100,000 in their displayed unit, box size to 10,000 and the base estimate to ten million pieces to reject accidental extreme inputs.
 
-## Validation status
+## Domain glossary
 
-This update documents the tracked source and project metadata. It does not certify a successful build, device test or compatibility with a current toolchain. Follow any project-specific validation instructions in the original material.
+- **Room area**: the actual rectangular surface, width × length in m².
+- **Floor pieces**: complete rows × columns before extra allowances.
+- **Required pieces**: floor pieces plus optional didactic skirting, then waste, rounded up.
+- **Purchased pieces**: full boxes × pieces per box; may exceed required pieces.
+- **Purchase area**: purchased pieces × one tile's area, not the room area.
 
-## License and attribution
+## Architecture
 
-No standalone repository-wide license file was identified in this review. Preserve the original credits and any component-specific licenses; this documentation update grants no additional rights.
+- `lib/domain/estimate.dart`: immutable validated result, pure calculation, localized decimal parser. No Flutter dependency.
+- `lib/pages/calculator_page.dart`: form state, validation, focus, example and reset. State is local to the screen.
+- `lib/widgets/estimate_card.dart`: empty/result presentation and calculation assumptions.
+- `lib/core/theme_app.dart`: Material 3 typography, colors, fields and cards.
+- `test/`: conversion, rounding, invalid input, small dimensions and responsive form interaction tests.
 
----
+There is deliberately **no persistence or external service**. Reloading closes the current calculation. The old application had no stored data, so no storage migration is necessary and no artificial storage/service layer was added.
 
-## Original project material
+## Validate and build
 
-# Calculadora de pisos e revestimentos
+```sh
+dart format --output=none --set-exit-if-changed lib test
+flutter analyze
+flutter test --coverage
+flutter build web --no-wasm-dry-run
+```
 
-Aplicativo de uma calculadora de pisos e revestimentos criado para disciplina de Programação Mobile, criado por Kleber de Oliveira Andrade
+The committed GitHub workflow `.github/workflows/flutter.yml` runs these checks on `master` pushes and pull requests using Flutter 3.41.9. No invented passing/coverage badge is shown. Transitive test packages are pinned by Flutter; do not force incompatible upgrades to silence `pub outdated` notices.
 
-Tutorial de criação deste app: [clique aqui](https://medium.com/@kleberandrade/criando-um-aplicativo-em-flutter-para-calcular-a-quantidade-de-pisos-por-m%C2%B2-dac30b5b5027)
+For a built Web preview:
 
-<p align="center">
-    <img src="https://cdn-images-1.medium.com/max/400/1*-bDQqIcOqyc5-4qvQLBODQ.png" width="250"/>
-    <img src="https://cdn-images-1.medium.com/max/400/1*AcNqHgMroIwf2y7XAZHoGQ.png" width="250"/>
-    <img src="https://cdn-images-1.medium.com/max/400/1*B8I5SuZlGanHB8POBmBIZA.png" width="250"/>
-</p>
+```sh
+python3 -m http.server 8734 --bind 127.0.0.1 --directory build/web
+# Open http://127.0.0.1:8734
+```
 
-## Como clonar o projeto
+Android uses the current Flutter Gradle plugin DSL, Java 17 compilation and Flutter-provided SDK levels. An Android SDK/JDK is required; run `flutter doctor` and personally review any outstanding Android licenses before building. Release signing is still the template's debug signing; configure your own signing before distribution. Application ID remains `com.example.floor_calculator`.
 
-*   Faça um fork do projeto (precisa ter uma conta no github)
-*   Abra o terminal do Visual Studio Code
-*   Acesse a pasta onde deseja salvar o aplicativo e digite: git clone *link_do_projeto_no_seu_github* **floor_calculator**
-*   Clique em File --> Open e abra o projeto
-*   Não se esqueça de abrir o arquivo *pubspec.yaml* e salvar (CTRL + S) o arquivo para que os plugins sejam baixados 
+iOS uses the current scene lifecycle and minimum iOS **15** for the installed Xcode 27.2. Bundle ID remains `com.example.floorCalculator`. A physical-device release requires your own signing configuration. See [validation notes](docs/validation.md) for actual platform results and limitations; no physical-device validation is claimed.
 
-## Desafio para aula
+## Migration from the 2020 lesson
 
-*   [ ] Adicionar um novo atributo (price) na classe FloorModel e um novo campo numérico no CalculatorPage para o usuário digitar o preço;
-*   [ ] Criar uma função para calcular o preço na classe Controller e exibir o resultado no ResultDialog;
-*   [ ] Validar os campos de entrada para quando o usuário digitar valores negativos ou zero;
-*   [ ] Criar uma função para limpar (zerar) os campos do formulário;
-*   [ ] Criar um ícone para o aplicativo ([plugin flutter_launcher_icons](https://pub.dev/packages/flutter_launcher_icons), [gerador de ícone](https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html). Exemplo de como inserir imagens no flutter, [clique aqui](https://medium.com/@suragch/how-to-include-images-in-your-flutter-app-863889fc0b29).
+The project now uses Dart 3 null safety, immutable calculation results, current Flutter controls and Material 3. The old mutable models/controller/helpers and modal result are replaced by the focused domain, local form state and inline result card. **Important correction:** the old screen labeled tile sizes as centimeters but the controller divided them directly into meter dimensions; tile fields now actually accept centimeters. Enter `60`, not `0.6`, for a 60 cm tile. The original test supplied meters and masked that UI bug.
 
-## Licença
+No framework change, SDK-global upgrade, remote backend, telemetry or data migration was introduced. The MIT notice originally embedded in this README is retained verbatim in [LICENSE](LICENSE).
 
-    Copyright 2020 Kleber de Oliveira Andrade
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-    
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-    
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+## Lesson and credits
+
+Created for the Mobile Programming course by Kleber de Oliveira Andrade, 2020.
+
+- [Original Portuguese tutorial / classroom notes](https://medium.com/@kleberandrade/criando-um-aplicativo-em-flutter-para-calcular-a-quantidade-de-pisos-por-m%C2%B2-dac30b5b5027).
+- [Prepared Portuguese tutorial revision](docs/medium-update.pt-BR.md), with exact current code and commands. Publication/access status is recorded there.
+- The original lesson credits professor **Aloísio Delpupo** for the flooring explanation and **Código Fonte TV** for its TDD introduction; those credits remain applicable.
+- [Suragch's image tutorial](https://medium.com/@suragch/how-to-include-images-in-your-flutter-app-863889fc0b29) remains an optional third-party learning reference; its content was not edited or copied.
+- Further classroom exercises: add an optional per-box price and test currency rounding; implement actual skirting height/perimeter with a separate explicit calculation model. Input validation and clear are now implemented.
+
+UI uses Flutter's Material icons (and the official `cupertino_icons` 1.0.9 font for the adaptive iOS control) and code-native components; no unlicensed photos or third-party article screenshots were added. [Real browser screenshots](docs/screenshots/) document the running app.
