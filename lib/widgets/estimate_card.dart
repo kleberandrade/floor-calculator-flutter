@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import '../domain/estimate.dart';
 
 String decimal(double value) => value.toStringAsFixed(2).replaceAll('.', ',');
@@ -35,9 +36,8 @@ class EstimateCard extends StatelessWidget {
                 liveRegion: true,
                 child: Text(
                   '${value.purchasePieces} peças',
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: Theme.of(context).textTheme.displaySmall
+                      ?.copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
               Text(

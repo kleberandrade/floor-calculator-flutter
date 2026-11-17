@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+
 import '../domain/estimate.dart';
 import '../widgets/estimate_card.dart';
 
@@ -114,9 +115,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
         padding: const EdgeInsets.only(bottom: 20),
         child: Text(
           '$number  $title',
-          style: Theme.of(
-            context,
-          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+          style: Theme.of(context).textTheme.titleLarge
+              ?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
       ...children,
@@ -207,18 +207,16 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     ),
                     Text(
                       'PISO • PLANEJADOR',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.labelLarge?.copyWith(letterSpacing: 2),
+                      style: Theme.of(context).textTheme.labelLarge
+                          ?.copyWith(letterSpacing: 2),
                     ),
                   ],
                 ),
                 const SizedBox(height: 32),
                 Text(
                   'Cada peça conta.',
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: Theme.of(context).textTheme.displaySmall
+                      ?.copyWith(fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: 12),
                 Text(
