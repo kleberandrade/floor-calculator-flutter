@@ -1,0 +1,101 @@
+{
+  "verified_on": "2026-11-17",
+  "article_id": "dac30b5b5027",
+  "url": "https://medium.com/flutter-comunidade-br/criando-um-aplicativo-em-flutter-para-calcular-a-quantidade-de-pisos-por-m%C2%B2-dac30b5b5027",
+  "publication_flow": "Save and publish; returned to public article with postPublishedType=repub",
+  "title_preserved": true,
+  "code_blocks": 12,
+  "comparison": "Exact DOM-rendered code text compared with final local snippets, trimming only outer whitespace.",
+  "all_code_blocks_match": true,
+  "code_checks": [
+    {
+      "index": 1,
+      "language": "sh",
+      "source_sha256": "9685ecd3abb91603afe0cfefd27d502386937051ae5f1b6606ed250230daa790",
+      "published_match": true
+    },
+    {
+      "index": 2,
+      "language": "text",
+      "source_sha256": "3c4fa883aec730ea9efa94c9dc035aaf9039b73b28f0dffbf40b4c7f2b66ee4f",
+      "published_match": true
+    },
+    {
+      "index": 3,
+      "language": "yaml",
+      "source_sha256": "9718e5773333758389abe61b19787e5f35de8c1a220dff19620e842c1ec46d47",
+      "published_match": true
+    },
+    {
+      "index": 4,
+      "language": "dart",
+      "source_sha256": "eec3a42cfad89ad0a7e5ed291caa51b4e5c95dfc9f057918f6685591d32ebbf3",
+      "published_match": true
+    },
+    {
+      "index": 5,
+      "language": "text",
+      "source_sha256": "d73535c5cc0381f44fba16c80b5af2f4b3492be66bb1fc02dd9023e88dd2ef4b",
+      "published_match": true
+    },
+    {
+      "index": 6,
+      "language": "dart",
+      "source_sha256": "8bc580eb035c0be7116938fee85081533b49ef7e004c6b6ab8bca327899e8781",
+      "published_match": true
+    },
+    {
+      "index": 7,
+      "language": "dart",
+      "source_sha256": "486b1644378bb46f88c8bd77ca6854ad806a30122598ee996f41c18bf9da84b4",
+      "published_match": true
+    },
+    {
+      "index": 8,
+      "language": "dart",
+      "source_sha256": "5ee98ad3de8a69afd56d2cd3b0440bb58226b4353d8d66bdb12ba976bbf27052",
+      "published_match": true
+    },
+    {
+      "index": 9,
+      "language": "dart",
+      "source_sha256": "84f57e4a53aaf27fbe86ac65b793706e09326be6df815ad0339a8e55127971ea",
+      "published_match": true
+    },
+    {
+      "index": 10,
+      "language": "dart",
+      "source_sha256": "41047a89be03cfb1917b1562032ea10355e48b5956741e2905928459f4b2c66d",
+      "published_match": true
+    },
+    {
+      "index": 11,
+      "language": "dart",
+      "source_sha256": "d9691788fba6fa1726a03ab49cbdadbfc7fadde6471b5502375af650f9c2402b",
+      "published_match": true
+    },
+    {
+      "index": 12,
+      "language": "sh",
+      "source_sha256": "13663a2451de1228eefa8642451ae2897015bf7ea56eab1392a8eb3457e51fca",
+      "published_match": true
+    }
+  ],
+  "images": 5,
+  "all_published_images_loaded": true,
+  "all_images_have_captions": true,
+  "all_images_have_alt_text": true,
+  "featured_image": "https://miro.medium.com/v2/resize:fit:1200/0*F2dq0D1wpyg6IU3o.png",
+  "five_final_challenges": [
+    "Acrescente preço por caixa",
+    "Modele um rodapé real",
+    "Compare a orientação das peças",
+    "Inclua a largura da junta",
+    "Copie uma estimativa compreensível"
+  ],
+  "newsletter_action_used": false,
+  "screenshots": [
+    "medium-assets/medium-published-cover.jpg",
+    "medium-assets/medium-published-challenges.jpg"
+  ]
+}

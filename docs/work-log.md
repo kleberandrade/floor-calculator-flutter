@@ -23,3 +23,6 @@
 - Re-ran all nine tests, analysis and Web build; captured the actual updated app and produced a separately labeled conceptual cover.
 - Rewrote the Portuguese lesson around units, assumptions, testable domain, form state and clear results; included twelve copyable code blocks, five images and five new final challenges. Preserved article identity and external credits.
 - Updated README, dependency evidence, validation notes and Flutter CI pin. Authenticated editorial access was verified on this project's own Medium tab; publication outcome is recorded separately.
+- Reproduced the remote Dart 3.14 format-gate failure locally, applied the final package-language formatting and upgraded checkout to v6; the corrected Flutter 3.50 CI run passed.
+- Populated native Medium code blocks to preserve blank lines and ordinary code quotes; verified all twelve published blocks against local source. Added captions/alternative text to all five images and selected the new featured cover.
+- Published through the existing article's normal update flow and verified the public page, original URL, cover metadata, loaded images and five final challenges. No newsletter or third-party article was changed.

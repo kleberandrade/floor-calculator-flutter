@@ -55,6 +55,7 @@ There is deliberately **no persistence or external service**. Reloading closes t
 ## Validate and build
 
 ```sh
+flutter pub get
 dart format --output=none --set-exit-if-changed lib test
 flutter analyze
 flutter test --coverage
@@ -84,7 +85,7 @@ No framework change, SDK-global upgrade, remote backend, telemetry or data migra
 
 Created for the Mobile Programming course by Kleber de Oliveira Andrade, 2020.
 
-- [Original Portuguese tutorial / classroom notes](https://medium.com/@kleberandrade/criando-um-aplicativo-em-flutter-para-calcular-a-quantidade-de-pisos-por-m%C2%B2-dac30b5b5027).
+- [Updated Portuguese tutorial / classroom notes](https://medium.com/@kleberandrade/criando-um-aplicativo-em-flutter-para-calcular-a-quantidade-de-pisos-por-m%C2%B2-dac30b5b5027).
 - [Portuguese tutorial revision](docs/medium-update.pt-BR.md), with current code, an original cover, fresh screenshots and five classroom challenges. [Editorial status and asset provenance](docs/medium-publishing.md).
 - The original lesson credits professor **Aloísio Delpupo** for the flooring explanation and **Código Fonte TV** for its TDD introduction; those credits remain applicable.
 - [Suragch's image tutorial](https://medium.com/@suragch/how-to-include-images-in-your-flutter-app-863889fc0b29) remains an optional third-party learning reference; its content was not edited or copied.

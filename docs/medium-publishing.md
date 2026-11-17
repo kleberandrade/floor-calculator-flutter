@@ -6,17 +6,23 @@ Author: Kleber de Oliveira Andrade. Language: Portuguese. Article identity: `dac
 
 ## Editorial status
 
-On 2026-11-17 the Chrome session was authenticated as Kleber Andrade, and the article's own **Edit story** control opened its existing editor. This supersedes the signed-out state recorded during the earlier modernization. The article body has been backed up locally before editing. The refreshed body and images are prepared; publication is pending the normal editor flow and will be verified before completion.
+On 2026-11-17 the Chrome session was authenticated as Kleber Andrade, and the article's own **Edit story** control opened its existing editor. This supersedes the signed-out state recorded during the earlier modernization. The article body has been backed up locally before editing. The revision was saved and published through the normal **Save and publish** flow on the same article. The browser returned to the public article with `postPublishedType=repub`. The published page was then checked: all twelve code blocks matched the final local snippets exactly; all five images loaded and had captions plus alternative text; the five new challenges were the final authored headings. The featured-image picker selected the new cover, and the public `og:image` points to the same cover asset.
 
-The publication must keep this article's identity and language. No third-party article is being edited; no newsletter or subscriber email is authorized or sent.
+The publication must keep this article's identity and language. No third-party article was edited. No newsletter or subscriber-email action was used.
 
-## Prepared article
+## Published article source
 
 - `docs/medium-update.pt-BR.md`: copyable local article.
-- `docs/medium-update.pt-BR.html`: formatted native editor input.
+- `docs/medium-update.pt-BR.html`: formatted article source export. Medium split multi-line blocks on initial rich-text import, so its native code controls were populated and individually verified; the HTML export alone is not a guarantee of Medium import fidelity.
 - `docs/medium-assets/article-blocks.json`: structured authoring snapshot.
 - Twelve code blocks are copied from the final source or show explicitly labeled commands/formulas; there are no old screenshots of code.
 - The final five challenges propose box pricing, real skirting, orientation comparison, grout joints and copying an estimate. They are not claimed as implemented features.
+
+## Publication evidence
+
+- `docs/medium-publication-proof.json`: verification record from the public article.
+- `docs/medium-assets/medium-published-cover.jpg`: screenshot of the published title and new cover.
+- `docs/medium-assets/medium-published-challenges.jpg`: screenshot of the final challenge section.
 
 ## Images
 

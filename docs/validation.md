@@ -23,6 +23,8 @@ These are build and browser-interaction results, not a claim of execution on phy
 
 The first Flutter 3.50 analysis reported five deprecated legacy Material imports. They were replaced with `package:material_ui/material_ui.dart` following the official migration; the existing behavior tests then passed. No calculation or storage behavior was rewritten for the package upgrade.
 
+The first remote run exposed three Dart-format differences after the package language version became 3.14. The exact format check was reproduced locally, formatting was applied using the final package configuration, and analysis plus all nine tests passed again. Checkout was also moved to the supported Node 24-based v6 action.
+
 The first Android build rejected the old Gradle 8.14 configuration. The Flutter 3.50 template configuration was applied without using the dependency-validation bypass flag; the next APK build passed. Per-project Gradle heap/workers were bounded to avoid the generated template reserving 12 GB on a shared development computer.
 
 Earlier test-first work caught the centimeter/meter boundary, example reset order, tiny-positive-room rounding, extreme tile overflow, retained skirting state and nonempty fields after clearing. The nine tests preserve these regressions. There is no persistence or external-service layer in this app, so there is no stored-data migration or artificial service test.

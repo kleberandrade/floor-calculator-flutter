@@ -11,7 +11,8 @@
   [
     "image",
     "cover-floor-calculator.png",
-    "Ilustração conceitual criada com IA para esta revisão. As capturas do aplicativo ao longo da aula são reais."
+    "Ilustração conceitual criada com IA para esta revisão. As capturas do aplicativo ao longo da aula são reais.",
+    "Ilustração conceitual de peças de cerâmica em tons de terracota e creme, uma planta de ambiente e uma fita métrica. Não é uma captura do aplicativo."
   ],
   [
     "paragraph",
@@ -28,11 +29,11 @@
   ],
   [
     "paragraph",
-    "Instale o Flutter 3.50.0 estável e confira flutter --version. Abra um terminal e execute os comandos abaixo. O Chrome permite acompanhar a aula sem configurar um emulador. Para Android e iOS, instale também as ferramentas nativas indicadas no README do projeto."
+    "Instale o Flutter 3.50.0 estável e confira a versão exibida pelo primeiro comando abaixo. Abra um terminal e execute os comandos abaixo. O Chrome permite acompanhar a aula sem configurar um emulador. Para Android e iOS, instale também as ferramentas nativas indicadas no README do projeto."
   ],
   [
     "code",
-    "git clone https://github.com/kleberandrade/floor-calculator-flutter.git\ncd floor-calculator-flutter\nflutter pub get\nflutter run -d chrome",
+    "flutter --version\ngit clone https://github.com/kleberandrade/floor-calculator-flutter.git\ncd floor-calculator-flutter\nflutter pub get\nflutter run -d chrome",
     "sh"
   ],
   [
@@ -42,7 +43,8 @@
   [
     "image",
     "app-empty-flutter-350.jpg",
-    "Formulário real no Chrome com Flutter 3.50: ambiente em metros, peças em centímetros e compra em caixas."
+    "Formulário real no Chrome com Flutter 3.50: ambiente em metros, peças em centímetros e compra em caixas.",
+    "Tela real da calculadora com campos de ambiente em metros, peça em centímetros, margem de perda e peças por caixa, antes do primeiro cálculo."
   ],
   [
     "paragraph",
@@ -99,7 +101,7 @@
   ],
   [
     "paragraph",
-    "Todos os pacotes estão na versão mais recente que o Flutter 3.50.0 estável consegue resolver. Dois transitivos continuam fixados pelo SDK: material_color_utilities 0.13.0 e test_api 0.7.14. Existem versões 0.13.1 e 0.7.15 no registro, mas forçá-las com dependency_overrides esconderia a restrição do SDK. Para conferir a diferença entre versão publicada e versão compatível, execute flutter pub outdated --show-all. O relatório completo está em docs/dependencies.md."
+    "Todos os pacotes estão na versão mais recente que o Flutter 3.50.0 estável consegue resolver. Dois transitivos continuam fixados pelo SDK: material_color_utilities 0.13.0 e test_api 0.7.14. Existem versões 0.13.1 e 0.7.15 no registro, mas forçá-las com dependency_overrides esconderia a restrição do SDK. Para conferir a diferença entre versão publicada e versão compatível, execute o comando de auditoria apresentado na seção de verificação. O relatório completo está em docs/dependencies.md."
   ],
   [
     "heading",
@@ -183,7 +185,8 @@
   [
     "image",
     "app-error-flutter-350.jpg",
-    "Entrada zero rejeitada no app real: a mensagem explica o problema junto ao campo, e o resultado antigo é removido."
+    "Entrada zero rejeitada no app real: a mensagem explica o problema junto ao campo, e o resultado antigo é removido.",
+    "Tela real com largura zero rejeitada e mensagem Informe um valor maior que zero junto ao campo."
   ],
   [
     "heading",
@@ -197,7 +200,8 @@
   [
     "image",
     "app-result-flutter-350.jpg",
-    "Exemplo executado no Chrome: 24 peças para o piso, 27 com perda, sete caixas e 28 peças compradas."
+    "Exemplo executado no Chrome: 24 peças para o piso, 27 com perda, sete caixas e 28 peças compradas.",
+    "Tela real do exemplo: 24 peças para o piso, 27 com perda, sete caixas, 28 peças compradas e 10,08 metros quadrados de compra."
   ],
   [
     "paragraph",
@@ -218,13 +222,14 @@
   ],
   [
     "code",
-    "import 'package:material_ui/material_ui.dart';\nimport 'core/theme_app.dart';\nimport 'pages/calculator_page.dart';\n\nvoid main() => runApp(const MyApp());\n\nclass MyApp extends StatelessWidget {\n  const MyApp({super.key});\n  @override\n  Widget build(BuildContext context) => MaterialApp(\n    debugShowCheckedModeBanner: false,\n    title: 'Calculadora de pisos',\n    theme: themeApp,\n    home: const CalculatorPage(),\n  );\n}",
+    "import 'package:material_ui/material_ui.dart';\n\nimport 'core/theme_app.dart';\nimport 'pages/calculator_page.dart';\n\nvoid main() => runApp(const MyApp());\n\nclass MyApp extends StatelessWidget {\n  const MyApp({super.key});\n  @override\n  Widget build(BuildContext context) => MaterialApp(\n    debugShowCheckedModeBanner: false,\n    title: 'Calculadora de pisos',\n    theme: themeApp,\n    home: const CalculatorPage(),\n  );\n}",
     "dart"
   ],
   [
     "image",
     "app-mobile-flutter-350.jpg",
-    "Captura real em 390 × 844: o cartão fica abaixo do formulário, com texto e pressupostos legíveis."
+    "Captura real em 390 × 844: o cartão fica abaixo do formulário, com texto e pressupostos legíveis.",
+    "Tela real em largura de 390 pixels mostrando o cartão de compra abaixo do formulário, com 28 peças, sete caixas e os pressupostos do cálculo."
   ],
   [
     "heading",

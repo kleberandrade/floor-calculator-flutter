@@ -2,7 +2,7 @@
 
 Notas de aula do professor Kleber de Oliveira Andrade
 
-![Ilustração conceitual criada com IA para esta revisão. As capturas do aplicativo ao longo da aula são reais.](medium-assets/cover-floor-calculator.png)
+![Ilustração conceitual de peças de cerâmica em tons de terracota e creme, uma planta de ambiente e uma fita métrica. Não é uma captura do aplicativo.](medium-assets/cover-floor-calculator.png)
 
 *Ilustração conceitual criada com IA para esta revisão. As capturas do aplicativo ao longo da aula são reais.*
 
@@ -12,9 +12,10 @@ A proposta continua sendo um projeto de estudo, com uma tela e sem banco de dado
 
 ## 1. Experimente antes de alterar
 
-Instale o Flutter 3.50.0 estável e confira flutter --version. Abra um terminal e execute os comandos abaixo. O Chrome permite acompanhar a aula sem configurar um emulador. Para Android e iOS, instale também as ferramentas nativas indicadas no README do projeto.
+Instale o Flutter 3.50.0 estável e confira a versão exibida pelo primeiro comando abaixo. Abra um terminal e execute os comandos abaixo. O Chrome permite acompanhar a aula sem configurar um emulador. Para Android e iOS, instale também as ferramentas nativas indicadas no README do projeto.
 
 ```sh
+flutter --version
 git clone https://github.com/kleberandrade/floor-calculator-flutter.git
 cd floor-calculator-flutter
 flutter pub get
@@ -23,7 +24,7 @@ flutter run -d chrome
 
 Clique em “Usar exemplo” e depois em “Calcular quantidade”. Observe primeiro os campos e as unidades; em seguida, confira os números do cartão. Você pode usar Tab e Shift+Tab para navegar e Enter no último campo para calcular. O botão de limpeza esvazia todos os campos e remove a estimativa anterior.
 
-![Formulário real no Chrome com Flutter 3.50: ambiente em metros, peças em centímetros e compra em caixas.](medium-assets/app-empty-flutter-350.jpg)
+![Tela real da calculadora com campos de ambiente em metros, peça em centímetros, margem de perda e peças por caixa, antes do primeiro cálculo.](medium-assets/app-empty-flutter-350.jpg)
 
 *Formulário real no Chrome com Flutter 3.50: ambiente em metros, peças em centímetros e compra em caixas.*
 
@@ -81,7 +82,7 @@ No Flutter 3.50, importamos os componentes com package:material_ui/material_ui.d
 import 'package:material_ui/material_ui.dart';
 ```
 
-Todos os pacotes estão na versão mais recente que o Flutter 3.50.0 estável consegue resolver. Dois transitivos continuam fixados pelo SDK: material_color_utilities 0.13.0 e test_api 0.7.14. Existem versões 0.13.1 e 0.7.15 no registro, mas forçá-las com dependency_overrides esconderia a restrição do SDK. Para conferir a diferença entre versão publicada e versão compatível, execute flutter pub outdated --show-all. O relatório completo está em docs/dependencies.md.
+Todos os pacotes estão na versão mais recente que o Flutter 3.50.0 estável consegue resolver. Dois transitivos continuam fixados pelo SDK: material_color_utilities 0.13.0 e test_api 0.7.14. Existem versões 0.13.1 e 0.7.15 no registro, mas forçá-las com dependency_overrides esconderia a restrição do SDK. Para conferir a diferença entre versão publicada e versão compatível, execute o comando de auditoria apresentado na seção de verificação. O relatório completo está em docs/dependencies.md.
 
 ## 4. Separe o cálculo da tela
 
@@ -335,7 +336,7 @@ O exemplo precisa restaurar todos os seus pressupostos, inclusive desligar um ro
 
 Os testes de widget verificam o resultado 28 peças / 7 caixas, ligam o rodapé antes de carregar o exemplo, editam uma medida e confirmam que o resultado some, tentam calcular com zero e inspecionam os seis campos após limpar. Outro teste percorre o fluxo em 390 × 844 com texto ampliado em 1,5 vez. Consulte test/widget_test.dart para ver os cenários completos.
 
-![Entrada zero rejeitada no app real: a mensagem explica o problema junto ao campo, e o resultado antigo é removido.](medium-assets/app-error-flutter-350.jpg)
+![Tela real com largura zero rejeitada e mensagem Informe um valor maior que zero junto ao campo.](medium-assets/app-error-flutter-350.jpg)
 
 *Entrada zero rejeitada no app real: a mensagem explica o problema junto ao campo, e o resultado antigo é removido.*
 
@@ -343,7 +344,7 @@ Os testes de widget verificam o resultado 28 peças / 7 caixas, ligam o rodapé 
 
 Em telas largas, o formulário e o cartão aparecem lado a lado. Em telas estreitas, os mesmos componentes ficam em coluna, com rolagem. O cartão distingue peças para o piso, peças adicionais de rodapé, quantidade com perda e compra em caixas. Não usamos um carregamento fictício para um cálculo síncrono; o estado vazio orienta a primeira utilização e as mensagens de erro descrevem problemas concretos.
 
-![Exemplo executado no Chrome: 24 peças para o piso, 27 com perda, sete caixas e 28 peças compradas.](medium-assets/app-result-flutter-350.jpg)
+![Tela real do exemplo: 24 peças para o piso, 27 com perda, sete caixas, 28 peças compradas e 10,08 metros quadrados de compra.](medium-assets/app-result-flutter-350.jpg)
 
 *Exemplo executado no Chrome: 24 peças para o piso, 27 com perda, sete caixas e 28 peças compradas.*
 
@@ -381,6 +382,7 @@ A entrada do app conecta tema e página. Este é o arquivo completo lib/main.dar
 
 ```dart
 import 'package:material_ui/material_ui.dart';
+
 import 'core/theme_app.dart';
 import 'pages/calculator_page.dart';
 
@@ -398,7 +400,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-![Captura real em 390 × 844: o cartão fica abaixo do formulário, com texto e pressupostos legíveis.](medium-assets/app-mobile-flutter-350.jpg)
+![Tela real em largura de 390 pixels mostrando o cartão de compra abaixo do formulário, com 28 peças, sete caixas e os pressupostos do cálculo.](medium-assets/app-mobile-flutter-350.jpg)
 
 *Captura real em 390 × 844: o cartão fica abaixo do formulário, com texto e pressupostos legíveis.*
 
