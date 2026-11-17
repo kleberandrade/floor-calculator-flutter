@@ -46,3 +46,4 @@ coverage/
 ios/Flutter/ephemeral/
 .metrics/
 android/.kotlin/
+android/build/
