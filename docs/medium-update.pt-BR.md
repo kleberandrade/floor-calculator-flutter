@@ -1,22 +1,18 @@
-# Revisão do tutorial — Calculadora de pisos e revestimentos
+# Criando um aplicativo em Flutter para calcular a quantidade de pisos por m²
 
-URL original: https://medium.com/@kleberandrade/criando-um-aplicativo-em-flutter-para-calcular-a-quantidade-de-pisos-por-m%C2%B2-dac30b5b5027
+Notas de aula do professor Kleber de Oliveira Andrade
 
-Autor: Kleber de Oliveira Andrade. Idioma preservado: português.
+![Ilustração conceitual criada com IA para esta revisão. As capturas do aplicativo ao longo da aula são reais.](medium-assets/cover-floor-calculator.png)
 
-## Situação editorial em 17/11/2026
+*Ilustração conceitual criada com IA para esta revisão. As capturas do aplicativo ao longo da aula são reais.*
 
-O artigo real foi aberto e lido no Chrome: título, explicação MVC, modelos, helpers, controlador, testes, views, tema e desafios. A página mostra “Sign in”, “Sign up” e “Unknown user”; não há sessão editorial autenticada nem comando de edição. Nenhuma alteração foi publicada no Medium. Este arquivo é a revisão concreta para aplicar à mesma publicação quando houver acesso; não cria outro artigo nem altera artigos de terceiros.
+Quantas peças precisamos comprar para revestir um cômodo? A resposta depende das medidas, da orientação das peças, dos recortes, da perda e da forma como o material é vendido. Nesta aula vamos transformar essas decisões em regras explícitas e testáveis em Dart, depois apresentar o resultado em um formulário Flutter.
 
-Preservar título, subtítulo “Notas de aula do professor Kleber de Oliveira Andrade”, URL, introdução, vídeo do professor Aloísio Delpupo, vídeo de TDD do Código Fonte TV e links/créditos de referência. As capturas antigas e os snippets em imagens descrevem a versão de 2020: substituir esses exemplos pelos códigos abaixo e usar as capturas reais de `docs/screenshots/`. O tutorial de @suragch permanece referência externa, sem alterações.
+A proposta continua sendo um projeto de estudo, com uma tela e sem banco de dados. Vamos usar Flutter 3.50.0, Dart 3.14.0 e Material 3, separar o cálculo da interface, aceitar vírgula decimal e mostrar exatamente de onde saem as quantidades. A atualização preserva o propósito e a autoria da aula publicada em 2020.
 
-## Texto atualizado para o corpo didático
+## 1. Experimente antes de alterar
 
-### Preparando o projeto
-
-Nesta revisão usamos Flutter 3.41.9 stable, com Dart 3.11.5 e null safety. O código continua em Flutter. Não há banco de dados nem autenticação: os valores vivem na tela e são perdidos ao fechar ou recarregar. Classes em memória não persistem dados em disco.
-
-Para acompanhar o projeto pronto:
+Instale o Flutter 3.50.0 estável e confira flutter --version. Abra um terminal e execute os comandos abaixo. O Chrome permite acompanhar a aula sem configurar um emulador. Para Android e iOS, instale também as ferramentas nativas indicadas no README do projeto.
 
 ```sh
 git clone https://github.com/kleberandrade/floor-calculator-flutter.git
@@ -25,43 +21,38 @@ flutter pub get
 flutter run -d chrome
 ```
 
-Para iniciar um projeto de estudo do zero: `flutter create --project-name floor_calculator floor_calculator`, depois use os arquivos e dependências abaixo. Android/iOS precisam das ferramentas nativas indicadas no README; não é necessário emulador para experimentar na Web. Não use mais o limite Dart `<3.0.0`.
+Clique em “Usar exemplo” e depois em “Calcular quantidade”. Observe primeiro os campos e as unidades; em seguida, confira os números do cartão. Você pode usar Tab e Shift+Tab para navegar e Enter no último campo para calcular. O botão de limpeza esvazia todos os campos e remove a estimativa anterior.
 
-### Estrutura e responsabilidades
+![Formulário real no Chrome com Flutter 3.50: ambiente em metros, peças em centímetros e compra em caixas.](medium-assets/app-empty-flutter-350.jpg)
 
-A aula original separava Model, View e Controller. Vamos manter a separação entre cálculo e apresentação, eliminando modelos mutáveis duplicados: `Estimate` recebe medidas, valida as regras e devolve um resultado imutável. A página cuida apenas dos campos, foco e estado local; o cartão apresenta o resultado; o tema define a aparência. Não é necessário acrescentar um gerenciador global de estado a uma tela independente.
+*Formulário real no Chrome com Flutter 3.50: ambiente em metros, peças em centímetros e compra em caixas.*
 
-- `lib/domain/estimate.dart`: números de entrada e cálculo puro, sem Flutter.
-- `lib/pages/calculator_page.dart`: formulário e estado local.
-- `lib/widgets/estimate_card.dart`: estado vazio, resultados e pressupostos.
-- `lib/core/theme_app.dart`: tema Material 3.
-- `lib/main.dart`: entrada do app.
+O exemplo utiliza ambiente de 2,40 × 3,22 m, peças de 60 × 60 cm, perda de 10% e quatro peças por caixa. O rodapé didático começa desligado. O resultado esperado é 24 peças para o piso, 27 peças após a margem e sete caixas, ou 28 peças compradas. A área do ambiente e a área de compra são números diferentes.
 
-Os antigos `RoomModel`, `FloorModel`, `ResultModel`, `CalculatorController`, `ParseHelper`, `ValidatorHelper` e `ResultDialog` deixam de ser necessários. Não misture snippets antigos com estes arquivos.
+## 2. Entenda a regra antes de programar
 
-### Unidades e regra de cálculo
+Primeiro convertemos centímetros para metros: 60 cm = 0,60 m. Misturar unidades é um erro fácil de esconder: o teste antigo informava 0,6 enquanto a tela pedia centímetros. Na versão atual, digite 60 para representar uma peça de 60 cm; a conversão acontece uma única vez no domínio.
 
-O ambiente é informado em metros; cada peça é informada em centímetros. Corrigimos um erro do exemplo antigo: os rótulos diziam centímetros, mas o controlador dividia os valores diretamente por metros. Uma peça de 60 cm agora deve ser digitada como **60**, e convertida para **0,60 m** apenas no domínio.
+```text
+colunas = ceil(2,40 / 0,60) = 4
+fileiras = ceil(3,22 / 0,60) = 6
+peças para o piso = 4 × 6 = 24
+com perda de 10% = ceil(24 × 1,10) = 27
+caixas = ceil(27 / 4) = 7
+peças compradas = 7 × 4 = 28
+área real = 2,40 × 3,22 = 7,728 m²
+área de compra = 28 × 0,60 × 0,60 = 10,08 m²
+```
 
-Calculamos `ceil(larguraAmbiente / larguraPeçaEmMetros)` e `ceil(comprimentoAmbiente / comprimentoPeçaEmMetros)`, depois multiplicamos colunas por fileiras. Essa paginação é reta, com orientação fixa e sem reaproveitar recortes. Não é a mesma coisa que dividir somente as áreas. Juntas, portas e paginação diagonal não são modeladas.
+Por que arredondar cada dimensão? Uma fileira incompleta ainda ocupa uma posição na paginação. Dividir apenas a área do ambiente pela área de uma peça seria outro modelo de cálculo. Nossa regra usa paginação reta, orientação fixa e não reaproveita recortes. Ela não considera juntas, portas ou assentamento diagonal; essas hipóteses aparecem no próprio resultado.
 
-O rodapé da aula continua disponível como opção, desligada inicialmente. Sua regra é **colunas + fileiras peças adicionais**. É uma estimativa didática: não conhece perímetro e altura real de rodapé e não deve ser apresentada como dimensionamento de instalação.
+O arredondamento de compra vem por último. Arredondar as caixas antes de aplicar a perda pode produzir outra quantidade. A perda não é um número “mágico” escondido no código: é um campo visível de 0 a 100%. Confira a margem e a paginação com o instalador antes de comprar.
 
-Aplicamos depois a margem de perda (0 a 100%) e arredondamos para peças inteiras. Por último arredondamos para caixas fechadas. O cartão distingue a área real do ambiente da área comprada. Para 2,40 × 3,22 m e peças de 60 × 60 cm: 4 colunas × 6 fileiras = 24 peças. Com rodapé didático, perda zero e uma peça por caixa: 34 peças e 12,24 m². Sem rodapé, com perda de 10% e quatro peças por caixa: 27 peças necessárias, 7 caixas, 28 peças compradas e 10,08 m².
+A opção “Incluir rodapé didático” preserva a regra da aula original: acrescentar uma peça por fileira e uma por coluna. Com o exemplo, são 6 + 4 = 10 peças adicionais; sem perda e com uma peça por caixa, chegamos a 34 peças e 12,24 m². Essa regra não conhece a altura do rodapé e não substitui um dimensionamento por perímetro e cortes. Por isso ela é opcional e está identificada como didática.
 
-### Entradas e interação
+## 3. Atualize dependências sem misturar versões
 
-O parser aceita vírgula ou ponto decimal, não separadores de milhar. Campos vazios, texto, NaN, infinito, zero ou valores negativos não viram silenciosamente zero. Peças por caixa deve ser inteiro positivo. Há limites para impedir estimativas acidentalmente enormes.
-
-“Usar exemplo” carrega medidas locais reproduzíveis. “Limpar formulário” limpa estado e resultados. Ao editar uma medida, removemos a estimativa anterior. Tab/Shift+Tab navegam pelos campos; Enter no último campo calcula. Em telas estreitas o resultado fica abaixo do formulário, acessível por rolagem. O formulário e o cartão suportam ampliação de texto; mensagens de erro e resultado têm semântica acessível.
-
-`RaisedButton` e `FlatButton` são substituídos pelos controles atuais `FilledButton`, `TextButton` e `IconButton`. `accentColor` é substituído por `ColorScheme`. Não usamos APIs antigas sem null safety. O cálculo é síncrono; não acrescentamos um carregamento fictício. A versão Web mostra uma mensagem enquanto o Flutter inicia e informa falha de inicialização.
-
-### Arquivos completos da versão revisada
-
-Copie cada bloco para o caminho indicado. O código abaixo é o código final do repositório, não pseudocódigo.
-
-#### `pubspec.yaml`
+Este é o pubspec.yaml usado no projeto. O arquivo pubspec.lock fica versionado para reproduzir a resolução. Flutter e flutter_test acompanham o SDK; material_ui contém os componentes atuais do Material, cupertino_icons fornece a fonte do controle adaptativo e flutter_lints ajuda a manter o código consistente.
 
 ```yaml
 name: floor_calculator
@@ -69,12 +60,13 @@ description: Calculate floor and wall-covering quantities with explicit units an
 publish_to: none
 version: 2.0.0+2
 environment:
-  sdk: '>=3.11.0 <4.0.0'
-  flutter: '>=3.41.0'
+  sdk: '>=3.14.0 <4.0.0'
+  flutter: '>=3.50.0'
 dependencies:
-  cupertino_icons: ^1.0.9
+  cupertino_icons: ^2.0.0
   flutter:
     sdk: flutter
+  material_ui: ^1.11.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -83,13 +75,106 @@ flutter:
   uses-material-design: true
 ```
 
-#### `analysis_options.yaml`
+No Flutter 3.50, importamos os componentes com package:material_ui/material_ui.dart, conforme a migração oficial do Flutter. Não basta atualizar o número do SDK e manter imports descontinuados. A aplicação continua em Flutter; não há troca de framework.
 
-```yaml
-include: package:flutter_lints/flutter.yaml
+```dart
+import 'package:material_ui/material_ui.dart';
 ```
 
-#### `lib/domain/estimate.dart`
+Todos os pacotes estão na versão mais recente que o Flutter 3.50.0 estável consegue resolver. Dois transitivos continuam fixados pelo SDK: material_color_utilities 0.13.0 e test_api 0.7.14. Existem versões 0.13.1 e 0.7.15 no registro, mas forçá-las com dependency_overrides esconderia a restrição do SDK. Para conferir a diferença entre versão publicada e versão compatível, execute flutter pub outdated --show-all. O relatório completo está em docs/dependencies.md.
+
+## 4. Separe o cálculo da tela
+
+Uma decisão deve ter um lugar claro. Em lib/domain/estimate.dart ficam a conversão do texto, as regras de validade e o cálculo. Esse arquivo não importa Flutter: podemos testar seus resultados sem abrir uma tela. A página guarda o estado do formulário; o cartão apenas apresenta uma Estimate válida. Não precisamos duplicar largura e comprimento em dois modelos mutáveis nem criar um gerenciador global para uma única tela.
+
+```text
+lib/
+  domain/estimate.dart          → parsing e cálculo puro
+  pages/calculator_page.dart    → campos, foco e estado local
+  widgets/estimate_card.dart    → estado vazio e resultado
+  core/theme_app.dart           → tema Material 3
+  main.dart                    → entrada do aplicativo
+test/
+  estimate_test.dart            → regras de cálculo
+  widget_test.dart              → interação do formulário
+```
+
+Antes de implementar uma regra, escreva o resultado esperado e veja o teste falhar pelo motivo certo. O arquivo abaixo verifica o exemplo original, perdas e caixas, arredondamento, limites e vírgula decimal. Se você estiver acompanhando a partir do repositório pronto, os testes já passam: altere uma regra de propósito, observe a falha e desfaça a alteração. Não confunda esse exercício com o histórico de implementação.
+
+Arquivo completo: test/estimate_test.dart.
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:floor_calculator/domain/estimate.dart';
+
+void main() {
+  Estimate run({
+    double width = 2.4,
+    double length = 3.22,
+    double tileWidth = 60,
+    double tileLength = 60,
+    double waste = 0,
+    int perBox = 1,
+    bool skirting = false,
+  }) => Estimate.calculate(
+    roomWidth: width,
+    roomLength: length,
+    tileWidthCm: tileWidth,
+    tileLengthCm: tileLength,
+    wastePercent: waste,
+    piecesPerBox: perBox,
+    includeSkirting: skirting,
+  );
+  test('converts centimeters and preserves row-by-row classroom example', () {
+    final result = run(skirting: true);
+    expect(result.columns, 4);
+    expect(result.rows, 6);
+    expect(result.floorPieces, 24);
+    expect(result.skirtingPieces, 10);
+    expect(result.requiredPieces, 34);
+    expect(result.purchaseArea, closeTo(12.24, 1e-9));
+    expect(result.roomArea, closeTo(7.728, 1e-9));
+  });
+  test('rounds waste then full boxes upward', () {
+    final result = run(waste: 10, perBox: 4);
+    expect(result.requiredPieces, 27);
+    expect(result.boxes, 7);
+    expect(result.purchasePieces, 28);
+    expect(result.purchaseArea, closeTo(10.08, 1e-9));
+  });
+  test('does not add a phantom row for floating point multiples', () {
+    expect(
+      run(width: 2.1, length: 2.1, tileWidth: 30, tileLength: 30).floorPieces,
+      49,
+    );
+  });
+  test('a tiny positive room still needs one piece', () {
+    expect(run(width: 1e-12, length: 1e-12).floorPieces, 1);
+  });
+  test('rejects invalid and impractically large quantities', () {
+    for (final value in [0.0, -1.0, double.nan, double.infinity, 1e12]) {
+      expect(() => run(width: value), throwsArgumentError);
+      expect(() => run(tileWidth: value), throwsArgumentError);
+    }
+    expect(() => run(waste: -1), throwsArgumentError);
+    expect(() => run(waste: 101), throwsArgumentError);
+    expect(() => run(perBox: 0), throwsArgumentError);
+    expect(() => run(tileWidth: 0.000001), throwsArgumentError);
+    expect(() => run(tileWidth: 1e-320), throwsArgumentError);
+  });
+  test(
+    'parses localized decimals without silently replacing invalid input',
+    () {
+      expect(parseNumber(' 2,40 '), 2.4);
+      for (final value in ['', 'abc', 'NaN', 'Infinity', '1.000,50']) {
+        expect(parseNumber(value), isNull);
+      }
+    },
+  );
+}
+```
+
+Agora leia a implementação completa em lib/domain/estimate.dart. O construtor privado evita criar resultados parciais. A fábrica recebe dimensões válidas, calcula todas as quantidades e devolve um objeto imutável. Não existe um resultado com área indefinida ou número de caixas ainda por preencher.
 
 ```dart
 /// Accept decimal comma or point, never grouping or non-finite values.
@@ -182,180 +267,17 @@ class Estimate {
 }
 ```
 
-#### `lib/core/theme_app.dart`
+parseNumber devolve null para uma entrada inválida, em vez de transformá-la silenciosamente em zero. Vírgula e ponto são separadores decimais; separadores de milhar não são aceitos. A fábrica também valida seus argumentos, porque o domínio pode ser chamado por outro código além do formulário. As duas validações protegem fronteiras diferentes: a página explica o erro ao usuário; o domínio protege a regra de negócio.
+
+A função _ceil corrige apenas ruído numérico muito próximo de um inteiro. Isso impede uma fileira extra em múltiplos como 2,10 / 0,30. Os limites também impedem converter infinito em inteiro ao receber uma peça de tamanho absurdamente pequeno. Dimensões positivas muito pequenas ainda precisam de pelo menos uma peça. Esses comportamentos possuem testes de regressão.
+
+## 5. Cuide do estado do formulário
+
+Abra lib/pages/calculator_page.dart no repositório para acompanhar a tela completa. Ela tem seis controladores de texto: duas medidas do ambiente, duas da peça, perda e peças por caixa. Os trechos abaixo são métodos reais de _CalculatorPageState; não são uma página independente para colar em main.dart.
+
+O método de cálculo valida primeiro o formulário, converte as entradas aprovadas e chama o domínio. Só depois guarda o resultado e remove o foco do teclado. Uma estimativa acima dos limites recebe uma mensagem visível, sem tentar mostrar um número inválido.
 
 ```dart
-import 'package:flutter/material.dart';
-
-final themeApp = ThemeData(
-  useMaterial3: true,
-  colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF9A452B)),
-  scaffoldBackgroundColor: const Color(0xFFF7F4EF),
-  inputDecorationTheme: const InputDecorationTheme(
-    filled: true,
-    fillColor: Colors.white,
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(12)),
-    ),
-    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-  ),
-  cardTheme: const CardThemeData(
-    color: Colors.white,
-    elevation: 0,
-    margin: EdgeInsets.zero,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(24)),
-    ),
-  ),
-);
-```
-
-#### `lib/widgets/estimate_card.dart`
-
-```dart
-import 'package:flutter/material.dart';
-import '../domain/estimate.dart';
-
-String decimal(double value) => value.toStringAsFixed(2).replaceAll('.', ',');
-
-class EstimateCard extends StatelessWidget {
-  const EstimateCard({super.key, required this.result});
-  final Estimate? result;
-  @override
-  Widget build(BuildContext context) {
-    final value = result;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(28),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Icon(
-              Icons.grid_view_rounded,
-              size: 36,
-              color: Color(0xFF9A452B),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              value == null ? 'Pronto para planejar?' : 'Sua lista de compra',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 12),
-            if (value == null)
-              const Text(
-                'Preencha as medidas ou use o exemplo. A estimativa aparecerá aqui, com todos os arredondamentos.',
-              )
-            else ...[
-              Semantics(
-                liveRegion: true,
-                child: Text(
-                  '${value.purchasePieces} peças',
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              Text(
-                '${value.boxes} caixas',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 20),
-              _line('Área do ambiente', '${decimal(value.roomArea)} m²'),
-              _line('Peças para o piso', '${value.floorPieces}'),
-              _line('Fileiras × colunas', '${value.rows} × ${value.columns}'),
-              _line('Peças para rodapé', '${value.skirtingPieces}'),
-              _line('Com margem de perda', '${value.requiredPieces} peças'),
-              const Divider(height: 28),
-              _line('Área de compra', '${decimal(value.purchaseArea)} m²'),
-            ],
-            const SizedBox(height: 24),
-            const Text(
-              'COMO ESTIMAMOS',
-              style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: 1.2),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Paginação reta, sem reaproveitar recortes. Arredondamos cada dimensão para cima, depois a perda e as caixas completas. Não considera juntas, portas ou paginação diagonal.',
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'Confira as medidas e a paginação com o instalador antes de comprar.',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _line(String label, String value) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 6),
-    child: Wrap(
-      spacing: 12,
-      runSpacing: 4,
-      children: [
-        Text(label),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.w700)),
-      ],
-    ),
-  );
-}
-```
-
-#### `lib/pages/calculator_page.dart`
-
-```dart
-import 'package:flutter/material.dart';
-import '../domain/estimate.dart';
-import '../widgets/estimate_card.dart';
-
-class CalculatorPage extends StatefulWidget {
-  const CalculatorPage({super.key});
-  @override
-  State<CalculatorPage> createState() => _CalculatorPageState();
-}
-
-class _CalculatorPageState extends State<CalculatorPage> {
-  final _form = GlobalKey<FormState>();
-  final _fields = List.generate(6, (_) => TextEditingController());
-  Estimate? _result;
-  String? _error;
-  bool _skirting = false;
-
-  @override
-  void dispose() {
-    for (final field in _fields) {
-      field.dispose();
-    }
-    super.dispose();
-  }
-
-  void _invalidate() => setState(() {
-    _result = null;
-    _error = null;
-  });
-
-  void _example() {
-    _skirting = false;
-    _form.currentState?.reset();
-    const values = ['2,40', '3,22', '60', '60', '10', '4'];
-    for (var i = 0; i < values.length; i++) {
-      _fields[i].text = values[i];
-    }
-    _invalidate();
-  }
-
-  void _clear() {
-    _form.currentState?.reset();
-    for (final field in _fields) {
-      field.clear();
-    }
-    setState(() {
-      _result = null;
-      _error = null;
-      _skirting = false;
-    });
-  }
-
   void _calculate() {
     if (!(_form.currentState?.validate() ?? false)) return;
     final values = _fields.map((field) => parseNumber(field.text)!).toList();
@@ -381,213 +303,84 @@ class _CalculatorPageState extends State<CalculatorPage> {
       });
     }
   }
-
-  String? _validate(String? text, int index) {
-    final value = parseNumber(text ?? '');
-    if (value == null) return 'Informe um número válido (ex.: 2,40).';
-    if (index == 4) {
-      return value <= 100 ? null : 'Use uma perda entre 0 e 100%.';
-    }
-    if (value <= 0) return 'Informe um valor maior que zero.';
-    if (index == 5 && (value != value.roundToDouble() || value > 10000)) {
-      return 'Use um inteiro de 1 a 10.000.';
-    }
-    return value <= 100000 ? null : 'Valor máximo: 100.000.';
-  }
-
-  Widget _field(int index, String label, String unit) => Padding(
-    padding: const EdgeInsets.only(bottom: 18),
-    child: TextFormField(
-      controller: _fields[index],
-      decoration: InputDecoration(
-        labelText: '$label ($unit)',
-        suffixText: unit,
-      ),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      textInputAction: index == 5 ? TextInputAction.done : TextInputAction.next,
-      validator: (text) => _validate(text, index),
-      onChanged: (_) => _invalidate(),
-      onFieldSubmitted: (_) {
-        if (index == 5) _calculate();
-      },
-    ),
-  );
-
-  Widget _section(String number, String title, List<Widget> children) => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: Text(
-          '$number  $title',
-          style: Theme.of(
-            context,
-          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
-        ),
-      ),
-      ...children,
-    ],
-  );
-
-  Widget _formCard() => Card(
-    child: Padding(
-      padding: const EdgeInsets.all(28),
-      child: Form(
-        key: _form,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _section('01', 'Seu ambiente', [
-              _field(0, 'Largura do ambiente', 'm'),
-              _field(1, 'Comprimento do ambiente', 'm'),
-            ]),
-            _section('02', 'Seu revestimento', [
-              _field(2, 'Largura da peça', 'cm'),
-              _field(3, 'Comprimento da peça', 'cm'),
-            ]),
-            _section('03', 'Planeje a compra', [
-              _field(4, 'Margem de perda', '%'),
-              _field(5, 'Peças por caixa', 'un.'),
-            ]),
-            SwitchListTile.adaptive(
-              contentPadding: EdgeInsets.zero,
-              value: _skirting,
-              title: const Text('Incluir rodapé didático'),
-              subtitle: const Text(
-                'Soma uma peça por fileira e por coluna. Não usa a altura real do rodapé.',
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _skirting = value;
-                });
-                _invalidate();
-              },
-            ),
-            const SizedBox(height: 20),
-            FilledButton.icon(
-              onPressed: _calculate,
-              icon: const Icon(Icons.calculate_outlined),
-              label: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text('Calcular quantidade'),
-              ),
-            ),
-            if (_error != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Semantics(
-                  liveRegion: true,
-                  child: Text(
-                    _error!,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    ),
-  );
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    body: SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1120),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 12,
-                  children: [
-                    const Icon(
-                      Icons.view_quilt_outlined,
-                      color: Color(0xFF9A452B),
-                      size: 32,
-                    ),
-                    Text(
-                      'PISO • PLANEJADOR',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.labelLarge?.copyWith(letterSpacing: 2),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32),
-                Text(
-                  'Cada peça conta.',
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'Calcule pisos e revestimentos com medidas claras e menos surpresas na compra.',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 16),
-                Wrap(
-                  spacing: 12,
-                  children: [
-                    TextButton.icon(
-                      onPressed: _example,
-                      icon: const Icon(Icons.auto_awesome_outlined),
-                      label: const Text('Usar exemplo'),
-                    ),
-                    IconButton(
-                      onPressed: _clear,
-                      tooltip: 'Limpar formulário',
-                      icon: const Icon(Icons.restart_alt),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    if (constraints.maxWidth < 800) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _formCard(),
-                          const SizedBox(height: 24),
-                          EstimateCard(result: _result),
-                        ],
-                      );
-                    }
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(flex: 6, child: _formCard()),
-                        const SizedBox(width: 24),
-                        Expanded(flex: 5, child: EstimateCard(result: _result)),
-                      ],
-                    );
-                  },
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Feito para aprender e planejar • Kleber de Oliveira Andrade',
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-}
 ```
 
-#### `lib/main.dart`
+A tela não deve continuar mostrando uma compra calculada com medidas antigas. Por isso onChanged chama _invalidate; o resultado volta ao estado vazio assim que você altera qualquer entrada. Também liberamos cada TextEditingController em dispose para encerrar corretamente o ciclo de vida da tela.
+
+O exemplo precisa restaurar todos os seus pressupostos, inclusive desligar um rodapé que estava ativado. Limpar precisa deixar os controladores realmente vazios. A ordem importa: FormState.reset pode repor os valores iniciais do campo; primeiro fazemos reset e, depois, limpamos os controladores.
 
 ```dart
-import 'package:flutter/material.dart';
+  void _example() {
+    _skirting = false;
+    _form.currentState?.reset();
+    const values = ['2,40', '3,22', '60', '60', '10', '4'];
+    for (var i = 0; i < values.length; i++) {
+      _fields[i].text = values[i];
+    }
+    _invalidate();
+  }
+
+  void _clear() {
+    _form.currentState?.reset();
+    for (final field in _fields) {
+      field.clear();
+    }
+    setState(() {
+      _result = null;
+      _error = null;
+      _skirting = false;
+    });
+  }
+```
+
+Os testes de widget verificam o resultado 28 peças / 7 caixas, ligam o rodapé antes de carregar o exemplo, editam uma medida e confirmam que o resultado some, tentam calcular com zero e inspecionam os seis campos após limpar. Outro teste percorre o fluxo em 390 × 844 com texto ampliado em 1,5 vez. Consulte test/widget_test.dart para ver os cenários completos.
+
+![Entrada zero rejeitada no app real: a mensagem explica o problema junto ao campo, e o resultado antigo é removido.](medium-assets/app-error-flutter-350.jpg)
+
+*Entrada zero rejeitada no app real: a mensagem explica o problema junto ao campo, e o resultado antigo é removido.*
+
+## 6. Apresente o resultado e os pressupostos
+
+Em telas largas, o formulário e o cartão aparecem lado a lado. Em telas estreitas, os mesmos componentes ficam em coluna, com rolagem. O cartão distingue peças para o piso, peças adicionais de rodapé, quantidade com perda e compra em caixas. Não usamos um carregamento fictício para um cálculo síncrono; o estado vazio orienta a primeira utilização e as mensagens de erro descrevem problemas concretos.
+
+![Exemplo executado no Chrome: 24 peças para o piso, 27 com perda, sete caixas e 28 peças compradas.](medium-assets/app-result-flutter-350.jpg)
+
+*Exemplo executado no Chrome: 24 peças para o piso, 27 com perda, sete caixas e 28 peças compradas.*
+
+A área de compra usa peças compradas × área de uma peça. Não a rotule como área real do cômodo. A formatação com duas casas serve para leitura: os cálculos mantêm a precisão do double, e os testes usam closeTo onde existe representação em ponto flutuante.
+
+O tema fica em um arquivo próprio. Observe os espaçamentos, os campos com rótulos e unidades persistentes e o contraste; a aparência deve ajudar o usuário a comparar informações, sem depender apenas de cores. O projeto usa ícones oficiais e componentes desenhados pelo próprio Flutter.
+
+```dart
+import 'package:material_ui/material_ui.dart';
+
+final themeApp = ThemeData(
+  useMaterial3: true,
+  colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF9A452B)),
+  scaffoldBackgroundColor: const Color(0xFFF7F4EF),
+  inputDecorationTheme: const InputDecorationTheme(
+    filled: true,
+    fillColor: Colors.white,
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+    ),
+    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+  ),
+  cardTheme: const CardThemeData(
+    color: Colors.white,
+    elevation: 0,
+    margin: EdgeInsets.zero,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(24)),
+    ),
+  ),
+);
+```
+
+A entrada do app conecta tema e página. Este é o arquivo completo lib/main.dart; o cartão completo está em lib/widgets/estimate_card.dart e a página completa em lib/pages/calculator_page.dart no repositório.
+
+```dart
+import 'package:material_ui/material_ui.dart';
 import 'core/theme_app.dart';
 import 'pages/calculator_page.dart';
 
@@ -605,189 +398,52 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-#### `test/estimate_test.dart`
+![Captura real em 390 × 844: o cartão fica abaixo do formulário, com texto e pressupostos legíveis.](medium-assets/app-mobile-flutter-350.jpg)
 
-```dart
-import 'package:flutter_test/flutter_test.dart';
-import 'package:floor_calculator/domain/estimate.dart';
+*Captura real em 390 × 844: o cartão fica abaixo do formulário, com texto e pressupostos legíveis.*
 
-void main() {
-  Estimate run({
-    double width = 2.4,
-    double length = 3.22,
-    double tileWidth = 60,
-    double tileLength = 60,
-    double waste = 0,
-    int perBox = 1,
-    bool skirting = false,
-  }) => Estimate.calculate(
-    roomWidth: width,
-    roomLength: length,
-    tileWidthCm: tileWidth,
-    tileLengthCm: tileLength,
-    wastePercent: waste,
-    piecesPerBox: perBox,
-    includeSkirting: skirting,
-  );
-  test('converts centimeters and preserves row-by-row classroom example', () {
-    final result = run(skirting: true);
-    expect(result.columns, 4);
-    expect(result.rows, 6);
-    expect(result.floorPieces, 24);
-    expect(result.skirtingPieces, 10);
-    expect(result.requiredPieces, 34);
-    expect(result.purchaseArea, closeTo(12.24, 1e-9));
-    expect(result.roomArea, closeTo(7.728, 1e-9));
-  });
-  test('rounds waste then full boxes upward', () {
-    final result = run(waste: 10, perBox: 4);
-    expect(result.requiredPieces, 27);
-    expect(result.boxes, 7);
-    expect(result.purchasePieces, 28);
-    expect(result.purchaseArea, closeTo(10.08, 1e-9));
-  });
-  test('does not add a phantom row for floating point multiples', () {
-    expect(
-      run(width: 2.1, length: 2.1, tileWidth: 30, tileLength: 30).floorPieces,
-      49,
-    );
-  });
-  test('a tiny positive room still needs one piece', () {
-    expect(run(width: 1e-12, length: 1e-12).floorPieces, 1);
-  });
-  test('rejects invalid and impractically large quantities', () {
-    for (final value in [0.0, -1.0, double.nan, double.infinity, 1e12]) {
-      expect(() => run(width: value), throwsArgumentError);
-      expect(() => run(tileWidth: value), throwsArgumentError);
-    }
-    expect(() => run(waste: -1), throwsArgumentError);
-    expect(() => run(waste: 101), throwsArgumentError);
-    expect(() => run(perBox: 0), throwsArgumentError);
-    expect(() => run(tileWidth: 0.000001), throwsArgumentError);
-    expect(() => run(tileWidth: 1e-320), throwsArgumentError);
-  });
-  test(
-    'parses localized decimals without silently replacing invalid input',
-    () {
-      expect(parseNumber(' 2,40 '), 2.4);
-      for (final value in ['', 'abc', 'NaN', 'Infinity', '1.000,50']) {
-        expect(parseNumber(value), isNull);
-      }
-    },
-  );
-}
-```
-
-#### `test/widget_test.dart`
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:floor_calculator/main.dart';
-
-void main() {
-  testWidgets(
-    'example calculates, editing invalidates result and clear resets',
-    (tester) async {
-      tester.view.physicalSize = const Size(1280, 1200);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      await tester.pumpWidget(const MyApp());
-      await tester.tap(find.byType(SwitchListTile));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Usar exemplo'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Calcular quantidade'));
-      await tester.pumpAndSettle();
-      expect(find.text('28 peças'), findsOneWidget);
-      expect(find.text('7 caixas'), findsOneWidget);
-      await tester.enterText(find.byType(TextFormField).first, '0');
-      await tester.pumpAndSettle();
-      expect(find.text('28 peças'), findsNothing);
-      await tester.tap(find.text('Calcular quantidade'));
-      await tester.pumpAndSettle();
-      expect(find.text('Informe um valor maior que zero.'), findsOneWidget);
-      await tester.tap(find.byTooltip('Limpar formulário'));
-      await tester.pumpAndSettle();
-      expect(find.text('Pronto para planejar?'), findsOneWidget);
-      final fields = tester.widgetList<TextFormField>(
-        find.byType(TextFormField),
-      );
-      expect(fields.every((field) => field.controller!.text.isEmpty), isTrue);
-    },
-  );
-  testWidgets('narrow screen with large text scrolls without overflow', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-    tester.platformDispatcher.textScaleFactorTestValue = 1.5;
-    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-    await tester.pumpWidget(const MyApp());
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Usar exemplo'));
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Calcular quantidade'));
-    await tester.tap(find.text('Calcular quantidade'));
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('28 peças'));
-    expect(find.text('7 caixas'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
-  testWidgets('validates localized input and explains excessive quantities', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(1280, 1500);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-    await tester.pumpWidget(const MyApp());
-    await tester.tap(find.text('Calcular quantidade'));
-    await tester.pumpAndSettle();
-    expect(
-      find.text('Informe um número válido (ex.: 2,40).'),
-      findsNWidgets(6),
-    );
-    await tester.tap(find.text('Usar exemplo'));
-    await tester.enterText(find.byType(TextFormField).at(4), '101');
-    await tester.enterText(find.byType(TextFormField).at(5), '2.5');
-    await tester.tap(find.text('Calcular quantidade'));
-    await tester.pumpAndSettle();
-    expect(find.text('Use uma perda entre 0 e 100%.'), findsOneWidget);
-    expect(find.text('Use um inteiro de 1 a 10.000.'), findsOneWidget);
-    await tester.tap(find.text('Usar exemplo'));
-    await tester.enterText(find.byType(TextFormField).at(2), '0,000001');
-    await tester.tap(find.text('Calcular quantidade'));
-    await tester.pumpAndSettle();
-    expect(
-      find.text('Quantidade muito alta. Confira as medidas e unidades.'),
-      findsOneWidget,
-    );
-    expect(tester.takeException(), isNull);
-  });
-}
-```
-
-### Testando e executando
+## 7. Rode os testes e confira a interface
 
 ```sh
 dart format --output=none --set-exit-if-changed lib test
 flutter analyze
 flutter test --coverage
 flutter build web --no-wasm-dry-run
+flutter pub outdated --show-all
 ```
 
-Os testes cobrem conversão de centímetros, exemplo original, arredondamento por dimensão, margem de perda, caixas fechadas, limites, números inválidos, dimensões muito pequenas e interação do formulário. O teste de tela confirma que editar invalida o resultado, que o exemplo desliga um rodapé ativado anteriormente e que limpar esvazia de fato todos os campos; também executa o fluxo em tela estreita com texto ampliado.
+Nesta revisão, os nove testes passaram, a análise terminou sem avisos e o build Web foi executado. O app real foi aberto no Chrome para conferir exemplo, resultado e entradas. Android e iOS também têm comandos e resultados de build registrados em docs/validation.md. Um build aprovado não comprova execução em um telefone físico.
 
-Os testes foram escritos antes da implementação correspondente e suas falhas foram observadas. A suíte foi então usada para corrigir o preenchimento do exemplo, a restauração da opção de rodapé, a limpeza real dos controladores de texto e um arredondamento que gerava zero peças para uma dimensão positiva muito pequena. O workflow do GitHub executa análise, formatação, testes e build Web. Consulte `docs/validation.md` para os resultados reais e limitações de plataformas.
+O GitHub Actions executa formatação, análise, testes e build Web com Flutter 3.50.0. Para uma verificação manual, calcule o exemplo, altere uma medida, tente zero, ligue o rodapé, carregue o exemplo novamente e limpe tudo. O resultado não deve permanecer visível após uma edição, e o exemplo deve voltar sempre aos mesmos pressupostos.
 
-### Resultado e desafios
+## Referências, código e créditos
 
-Abra no Chrome, selecione “Usar exemplo” e “Calcular quantidade”. Confira os valores explicados acima. No celular, role até o cartão. A interface apresenta ambiente, peça e compra em seções distintas e mantém os pressupostos próximos do resultado.
+O código completo continua em https://github.com/kleberandrade/floor-calculator-flutter, sob a licença MIT de Kleber de Oliveira Andrade (2020). A revisão do artigo e suas imagens ficam em docs/medium-update.pt-BR.md e docs/medium-assets/. As capturas são do app funcionando; a capa é uma ilustração conceitual, não uma captura de tela.
 
-Validação de negativos/zero e limpeza, antes desafios da aula, agora estão implementadas. Como exercício futuro, acrescente preço opcional por caixa com testes de arredondamento monetário ou substitua o rodapé didático por um modelo explícito de perímetro e altura. Não há orçamento de mão de obra nesta versão.
+A aula original creditava o professor Aloísio Delpupo pela explicação do cálculo de pisos e o Código Fonte TV pela introdução a TDD. Mantemos esses créditos e os materiais complementares: cálculo de pisos — https://www.youtube.com/watch?v=PkxxC9qeQsw; MVC — https://www.youtube.com/watch?v=jyTNhT67ZyY; SOLID — https://www.youtube.com/watch?v=6SfrO3D4dHM; TDD — https://www.youtube.com/watch?v=bLdEypr2e-8. São referências externas; seus conteúdos não foram copiados ou editados.
 
-O código completo permanece no repositório original. Preserve os créditos originais e a licença MIT de Kleber de Oliveira Andrade (2020). Os artigos de outras pessoas continuam somente como referências.
+Leituras complementares da aula original: testes em Dart — https://medium.com/flutterando/vamos-falar-de-testes-24f1eae72715; imagens em Flutter, de Suragch — https://medium.com/@suragch/how-to-include-images-in-your-flutter-app-863889fc0b29. Para a atualização do projeto: https://docs.flutter.dev/release/breaking-changes/material-ui-and-cupertino-ui e https://docs.flutter.dev/install/archive.
+
+## Cinco desafios para continuar aprendendo
+
+Implemente um desafio por vez: descreva o resultado esperado, escreva um teste que falhe, faça a menor mudança necessária e revise a interface. Os itens abaixo são extensões propostas; não são funcionalidades já entregues nesta versão.
+
+### 1. Acrescente preço por caixa
+
+Adicione um preço opcional por caixa e apresente o custo apenas quando ele for informado. Guarde dinheiro em centavos inteiros, valide o texto e teste o arredondamento de exibição. Critério: sete caixas a R$ 42,90 devem resultar em R$ 300,30; limpar também precisa remover o preço e o orçamento.
+
+### 2. Modele um rodapé real
+
+Crie um cálculo separado com perímetro do ambiente, altura do rodapé e exclusões de portas. Explique quais recortes podem ser reaproveitados, sem trocar silenciosamente a regra didática atual. Critério: forneça ao menos um exemplo desenhado à mão e um teste que confira perímetro, quantidade de faixas e arredondamento para peças inteiras.
+
+### 3. Compare a orientação das peças
+
+Calcule as duas orientações de uma peça retangular e mostre a escolhida e a alternativa. Não altere o modelo de aproveitamento de recortes sem explicar. Critério: em um ambiente de 2,40 × 3,22 m, peças de 30 × 60 cm exigem 48 peças em uma orientação e 44 na outra, antes da perda; teste também o empate com peças quadradas.
+
+### 4. Inclua a largura da junta
+
+Receba a junta em milímetros, converta a unidade no domínio e derive a regra para n peças com n − 1 juntas. Não acrescente uma junta fora de cada borda do ambiente. Critério: junta zero reproduz todos os resultados existentes, valor negativo é rejeitado e um teste de encaixe exato não cria uma peça extra.
+
+### 5. Copie uma estimativa compreensível
+
+Adicione uma ação para copiar um resumo textual com medidas, unidades, orientação, perda, rodapé e caixas. Separe a formatação do acesso à área de transferência. Critério: um teste puro verifica o resumo do exemplo e um teste de widget confirma o retorno acessível ao usuário; a ação só fica disponível para uma estimativa válida e atual.

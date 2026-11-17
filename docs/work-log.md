@@ -14,3 +14,12 @@
 - Replaced the generic README with verified project instructions, extracted the original MIT notice, prepared reproducible CI, and updated/verified GitHub About and the five useful existing topics.
 - Verified the first published GitHub Actions run succeeded, then added the dynamic badge for that existing workflow and branch.
 - Made ordered commits for application/domain, platform/CI and documentation/evidence. Final remote commit and CI outcome are reported in the completion message; remote publishing follows the user's later explicit authorization.
+
+## Dependency and Medium follow-up — 2026-11-17
+
+- Audited the current registry versions before changing constraints; verified the official Flutter 3.50.0 stable reference and used a separate SDK clone, preserving the shared SDK.
+- Upgraded all direct and resolvable transitive packages, migrated deprecated Material imports and retained the two exact SDK dependency pins without overrides.
+- Reproduced the Android Gradle-version failure, adopted current platform configuration and rebuilt successfully. The standard iOS simulator build now succeeds.
+- Re-ran all nine tests, analysis and Web build; captured the actual updated app and produced a separately labeled conceptual cover.
+- Rewrote the Portuguese lesson around units, assumptions, testable domain, form state and clear results; included twelve copyable code blocks, five images and five new final challenges. Preserved article identity and external credits.
+- Updated README, dependency evidence, validation notes and Flutter CI pin. Authenticated editorial access was verified on this project's own Medium tab; publication outcome is recorded separately.
