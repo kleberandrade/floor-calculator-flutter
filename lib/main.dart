@@ -1,19 +1,16 @@
-import 'package:floor_calculator/core/theme_app.dart';
-import 'package:floor_calculator/pages/calculator_page.dart';
 import 'package:flutter/material.dart';
+import 'core/theme_app.dart';
+import 'pages/calculator_page.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Calculadora de Pisos',
-      theme: themeApp,
-      home: CalculatorPage(),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp(
+    debugShowCheckedModeBanner: false,
+    title: 'Calculadora de pisos',
+    theme: themeApp,
+    home: const CalculatorPage(),
+  );
 }
